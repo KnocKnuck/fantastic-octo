@@ -19,6 +19,11 @@
 | [Analytics & Insights](#initiative-6) | 3 | 10 | 🔵 | P1 | [initiative-6-analytics.md](./initiative-6-analytics.md) |
 | [Platform Expansion](#initiative-7) | 4 | 16 | 🔵 | P2 | [initiative-7-platform-expansion.md](./initiative-7-platform-expansion.md) |
 | [Admin Panel & Settings](#initiative-8) | 7 | 24 | 🔵 | P0 | [initiative-8-admin-panel.md](./initiative-8-admin-panel.md) |
+| [User Success & Support](#initiative-9) | 6 | 21 | 🔵 | P0 | [initiative-9-user-success.md](./initiative-9-user-success.md) |
+| [AI Intelligence & Learning](#initiative-10) | 5 | 20 | 🔵 | P1 | [initiative-10-ai-intelligence.md](./initiative-10-ai-intelligence.md) |
+| [Integrations Ecosystem](#initiative-11) | 4 | 16 | 🔵 | P1 | [initiative-11-integrations.md](./initiative-11-integrations.md) |
+| [Focus & Productivity Tools](#initiative-12) | 3 | 10 | 🔵 | P1 | [initiative-12-focus-productivity.md](./initiative-12-focus-productivity.md) |
+| [Team Coordination & Meetings](#initiative-13) | 4 | 16 | 🔵 | P1 | [initiative-13-team-coordination.md](./initiative-13-team-coordination.md) |
 
 ---
 
@@ -80,6 +85,41 @@ Recurring tasks, templates, public API, mobile apps, team collaboration, integra
 
 Workspace settings, user management (roles, invites, activity), integration management (calendars, OAuth, API keys, webhooks), billing & subscription (plans, payments, invoices, usage), security (2FA, sessions, audit logs, GDPR), notification preferences, admin dashboard
 
+### <a name="initiative-9"></a>Initiative 9: User Success & Support
+**Goal**: Ensure users successfully activate, adopt, and get value from the product
+**Timeline**: Q1-Q2 2026 (Weeks 2-8)
+**Status**: 🔵 Not Started
+
+Interactive onboarding (tour, sample data, checklist), help docs (20+ articles, videos), support ticketing, feedback system (public roadmap, changelog), customer health monitoring, NPS surveys, accessibility compliance (WCAG 2.1 AA)
+
+### <a name="initiative-10"></a>Initiative 10: AI Intelligence & Learning
+**Goal**: Build intelligent AI that learns from user behavior and provides proactive suggestions
+**Timeline**: Q2 2026 (Weeks 13-20)
+**Status**: 🔵 Not Started
+
+Energy-based scheduling (morning person vs night owl), meeting fatigue detection, context switching reduction (task batching), smart suggestions engine (duration learning, productivity insights), travel time and location awareness
+
+### <a name="initiative-11"></a>Initiative 11: Integrations Ecosystem
+**Goal**: Seamlessly integrate with tools users already use
+**Timeline**: Q2-Q3 2026 (Weeks 13-24)
+**Status**: 🔵 Not Started
+
+Task management integrations (Todoist, Asana, Linear, Jira, Trello, ClickUp), communication integrations (Slack, Microsoft Teams), note-taking integrations (Notion, Obsidian), time tracking integrations (Toggl, Harvest, Clockify)
+
+### <a name="initiative-12"></a>Initiative 12: Focus & Productivity Tools
+**Goal**: Help users execute on their schedule with focus mode and productivity tools
+**Timeline**: Q2 2026 (Weeks 13-18)
+**Status**: 🔵 Not Started
+
+Focus mode (full-screen, DND, ambient sounds), Pomodoro timer integration (25-min cycles, break reminders), flow state tracking (uninterrupted sessions, analytics, flow-optimized scheduling)
+
+### <a name="initiative-13"></a>Initiative 13: Team Coordination & Meetings
+**Goal**: Enable teams to coordinate schedules and manage shared tasks
+**Timeline**: Q3 2026 (Weeks 19-24)
+**Status**: 🔵 Not Started
+
+Team calendar view (see everyone's availability), meeting scheduler like Calendly (booking pages, slots), team task assignment (capacity view, dependencies, Kanban board), team analytics dashboard (productivity, meeting culture, bottlenecks)
+
 ---
 
 ## Sprint Planning
@@ -121,8 +161,19 @@ Workspace settings, user management (roles, invites, activity), integration mana
 ---
 
 **Last Updated**: 2025-11-12
-**Version**: 3.0 (Multi-file Agile Format)
-**Total Initiatives**: 8
-**Total Stories**: 124+
-**Total Story Points**: 1095+
-**Estimated Timeline**: 6-7 months to full launch
+**Version**: 4.0 (40-Person Team, Enterprise-Ready)
+**Total Initiatives**: 13 core + 7 future expansion
+**Total Stories**: 186+
+**Total Story Points**: 2,512+ (core initiatives)
+**Team Size**: 40 people (6 cross-functional squads)
+**Estimated Timeline**: 12-18 months to market-leading product
+
+---
+
+## 📚 Additional Documentation
+
+- **Team Structure**: [.speckit/team-structure.md](../team-structure.md) - 40-person org chart, roles, squads
+- **OKRs & KPIs**: [.speckit/okrs-kpis.md](../okrs-kpis.md) - Quarterly objectives and key results
+- **Portfolio & Release Plan**: [.speckit/portfolio-release-plan.md](../portfolio-release-plan.md) - 18-month roadmap, PI planning
+- **Enhancement Analysis**: [.speckit/enhancements-analysis.md](../enhancements-analysis.md) - Strategic opportunities identified
+- **Constitution**: [.speckit/constitution](../constitution) - Project principles, team agreements, success metrics

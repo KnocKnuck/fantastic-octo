@@ -102,30 +102,124 @@ components/
 4. **Performance** - Lighthouse score > 90
 5. **Type Safety** - No bypassing TypeScript errors
 
+## Team Structure & Organization
+
+### Team Size: 40 People
+Organized into 6 cross-functional squads aligned to strategic initiatives.
+
+### Organizational Model
+- **Framework**: Agile at Scale (SAFe-inspired)
+- **Squads**: 6 cross-functional teams (6-7 people each)
+- **Sprint Cadence**: 2 weeks
+- **PI Planning**: Every 3 months (6 sprints)
+
+### Key Roles
+- **Portfolio Manager** (1): Strategic alignment, budget, resource allocation
+- **Product Owner** (1): Product vision, backlog prioritization
+- **Product Managers** (2): Initiative ownership, feature specs
+- **Program Manager** (1): Cross-initiative coordination, dependencies
+- **Scrum Masters** (2): Sprint facilitation, blocker removal
+- **Engineering Manager** (1): Technical strategy, team performance
+- **Tech Lead** (1): Architecture, code quality
+- **Engineers** (18): Full stack, frontend, backend, DevOps, QA
+- **Design Team** (4): Design lead, product designers, UX researcher
+- **Data & AI** (3): ML engineer, data engineer, data analyst
+- **Marketing & Growth** (4): Head of marketing, growth PM, content, SEO
+- **Support & Operations** (3): Customer success lead, support engineer, legal/compliance
+
+### Squad Organization
+1. **Squad Alpha**: Core Product (Auth, Calendar, Tasks)
+2. **Squad Beta**: AI & Integrations
+3. **Squad Gamma**: Platform & Infrastructure
+4. **Squad Delta**: Enterprise & Admin
+5. **Squad Epsilon**: User Experience & Growth
+6. **Squad Zeta**: Data & Insights
+
+**See**: `.speckit/team-structure.md` for full org chart and role descriptions
+
 ## Collaboration Guidelines
 
-### For UX/UI Agent
-- Focus on user experience and visual consistency
-- Provide design specifications before implementation
-- Ensure accessibility in all designs
-- Create component documentation
+### For Product Managers
+- Define clear initiative goals and success metrics
+- Write user stories with acceptance criteria
+- Prioritize backlog based on business value
+- Stakeholder communication and alignment
 
-### For Full Stack Developer
-- Implement according to specifications
-- Write clean, tested code
-- Document complex logic
-- Consider edge cases and error states
+### For Engineers (All Levels)
+- Follow technical standards (TypeScript, tests, documentation)
+- Participate in code reviews
+- Estimate story points accurately
+- Communicate blockers early
+- Mentor junior team members
 
-### For Project Manager
-- Define clear, achievable specifications
-- Prioritize features based on user value
-- Ensure team alignment
-- Track progress and remove blockers
+### For Designers
+- Create accessible, inclusive designs (WCAG 2.1 AA)
+- Maintain design system consistency
+- Collaborate with engineers during implementation
+- Conduct user research and usability testing
+
+### For Data & AI Team
+- Build scalable data pipelines
+- Ensure AI algorithms are explainable
+- Track and improve model performance
+- Partner with product on A/B tests
+
+### For Marketing & Growth
+- Drive user acquisition through SEO, content, and paid channels
+- Optimize onboarding and activation funnels
+- Build viral growth loops (referrals, social sharing)
+- Measure and report on growth metrics
+
+### For Support & Operations
+- Provide excellent customer support (SLA: < 4h response)
+- Document common issues in help center
+- Escalate bugs to engineering with reproduction steps
+- Ensure legal/compliance requirements are met
+
+## Working Agreements
+
+### Communication
+- **Slack**: Primary communication (see channels in team-structure.md)
+- **Jira**: Work tracking and sprint planning
+- **Notion**: Documentation and knowledge base
+- **Figma**: Design collaboration
+- **GitHub**: Code collaboration
+
+### Meetings
+- **Daily Standup**: 15 min (squad-level)
+- **Sprint Planning**: 2 hours (every 2 weeks)
+- **Sprint Review**: 1 hour (demo completed work)
+- **Sprint Retrospective**: 1 hour (continuous improvement)
+- **Backlog Refinement**: 1 hour mid-sprint
+- **All-Hands**: 1 hour monthly
+
+### Decision Making
+- **Product decisions**: Product Owner (with PM input)
+- **Technical decisions**: Tech Lead + Engineering Manager
+- **Design decisions**: Design Lead
+- **Resource allocation**: Portfolio Manager
 
 ## Success Metrics
 
+### Product Metrics
 - **Performance**: < 2s initial page load
-- **Uptime**: 99.9% availability
+- **Uptime**: 99.5% availability
 - **User Satisfaction**: NPS > 50
-- **Code Quality**: < 5% bug rate
-- **Development Speed**: 2-week sprint cycles
+- **Activation Rate**: 60%
+- **30-Day Retention**: 50%
+
+### Engineering Metrics
+- **Deployment Frequency**: 2-3 per week
+- **Lead Time**: < 24 hours (commit to production)
+- **Code Coverage**: 80%+
+- **Bug Rate**: < 5%
+- **Sprint Velocity**: 300 points/sprint (combined)
+
+### Business Metrics
+- **MRR Growth**: 30% MoM
+- **CAC**: < $150
+- **LTV:CAC**: > 3:1
+- **Free-to-Paid Conversion**: 15%
+- **Monthly Churn**: < 5%
+
+**See**: `.speckit/okrs-kpis.md` for detailed OKRs and KPIs
