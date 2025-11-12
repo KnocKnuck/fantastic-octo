@@ -11,8 +11,8 @@
 
 | Initiative | Features | Stories | Status | Priority | File |
 |------------|----------|---------|--------|----------|------|
-| [Foundation & Growth Engine](#initiative-1) | 6 | 28 | ✅ | P0 | [initiative-1-foundation.md](./initiative-1-foundation.md) |
-| [User Onboarding & Authentication](#initiative-2) | 3 | 15 | 🟡 | P0 | [initiative-2-authentication.md](./initiative-2-authentication.md) |
+| [Foundation & Growth Engine](#initiative-1) | 7 | 33 | ✅ | P0 | [initiative-1-foundation.md](./initiative-1-foundation.md) |
+| [User Onboarding & Authentication](#initiative-2) | 3 | 14 | 🟡 | P0 | [initiative-2-authentication.md](./initiative-2-authentication.md) |
 | [Calendar Integration Platform](#initiative-3) | 2 | 12 | 🔵 | P0 | [initiative-3-calendar-integration.md](./initiative-3-calendar-integration.md) |
 | [Task Management Core](#initiative-4) | 4 | 18 | 🔵 | P0 | [initiative-4-task-management.md](./initiative-4-task-management.md) |
 | [AI Scheduling Engine](#initiative-5) | 5 | 22 | 🔵 | P0 | [initiative-5-ai-scheduling.md](./initiative-5-ai-scheduling.md) |
@@ -34,7 +34,8 @@
 **Timeline**: Q4 2025 (Complete)
 **Status**: ✅ Done
 
-Landing page, SEO, content marketing, developer infrastructure, CI/CD, monitoring
+**Core Infrastructure**: Background jobs (Inngest), rate limiting, WebSocket/real-time, caching, workspace multi-tenancy
+**Growth Engine**: Landing page, SEO, content marketing, developer infrastructure, CI/CD, monitoring
 
 ### <a name="initiative-2"></a>Initiative 2: User Onboarding & Authentication
 **Goal**: Enable users to create accounts and access the application securely
@@ -161,12 +162,19 @@ Team calendar view (see everyone's availability), meeting scheduler like Calendl
 ---
 
 **Last Updated**: 2025-11-12
-**Version**: 4.0 (40-Person Team, Enterprise-Ready)
+**Version**: 4.1 (40-Person Team, Enterprise-Ready, Optimized)
 **Total Initiatives**: 13 core + 7 future expansion
-**Total Stories**: 186+
-**Total Story Points**: 2,512+ (core initiatives)
+**Total Stories**: 190+ (added infrastructure, removed duplicates)
+**Total Story Points**: 2,559+ (core initiatives)
 **Team Size**: 40 people (6 cross-functional squads)
 **Estimated Timeline**: 12-18 months to market-leading product
+
+**Recent Changes (v4.1)**:
+- ✅ Added Feature 1.0: Infrastructure Foundation (5 critical stories: background jobs, rate limiting, WebSocket, caching, workspace multi-tenancy)
+- ✅ Fixed Initiative 10 timeline (moved from Sprint 9 to Sprint 13 due to dependency on Initiative 5)
+- ✅ Updated database schema with Workspace, Integration, Notification, FocusSession, Booking, AuditLog models
+- ✅ Removed duplicate onboarding story from Initiative 2 (now in Initiative 9)
+- ✅ Balanced Squad Beta workload in PI 2 (was 183% overloaded, now 100%)
 
 ---
 

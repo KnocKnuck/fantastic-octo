@@ -305,29 +305,7 @@
 
 ---
 
-### Story 2.3.4: Onboarding Flow (Optional MVP)
-**As a** new user
-**I want** guided onboarding
-**So that** I understand how to use the product
-
-**Acceptance Criteria**:
-- [ ] Welcome screen with product intro
-- [ ] Set work hours step
-- [ ] Connect calendar prompt (skip for now)
-- [ ] Create first task prompt (skip for now)
-- [ ] Progress indicator
-- [ ] Skip option available
-- [ ] Mark onboarding as complete in DB
-
-**Story Points**: 13
-**Sprint**: Sprint 3
-**Status**: 🔵 Not Started
-**Priority**: P1 (Nice to have)
-**Assignee**: UX/UI Agent, Full Stack Developer
-
----
-
-### Story 2.3.5: Dashboard Layout & Navigation
+### Story 2.3.4: Dashboard Layout & Navigation
 **As a** user
 **I want** a consistent navigation
 **So that** I can easily access all features

@@ -128,17 +128,60 @@ model User {
   workDays      String[]  @default(["Mon", "Tue", "Wed", "Thu", "Fri"])
   breakDuration Int       @default(15) // minutes
 
+  // Multi-tenancy
+  workspaceId   String
+
   // Relations
+  workspace     Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   accounts      Account[]
   sessions      Session[]
   tasks         Task[]
   calendars     Calendar[]
   schedules     Schedule[]
+  notifications Notification[]
+  focusSessions FocusSession[]
+  auditLogs     AuditLog[]
 
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
   @@index([email])
+  @@index([workspaceId])
+}
+
+model Workspace {
+  id            String   @id @default(cuid())
+  name          String
+  slug          String   @unique
+  type          WorkspaceType @default(PERSONAL) // PERSONAL | TEAM | ENTERPRISE
+
+  // Billing
+  plan          String   @default("free") // free | pro | enterprise
+  stripeCustomerId String?
+  stripeSubscriptionId String?
+
+  // Settings
+  settings      Json     @default("{}")
+
+  // Relations
+  users         User[]
+  tasks         Task[]
+  calendars     Calendar[]
+  schedules     Schedule[]
+  integrations  Integration[]
+  bookings      Booking[]
+  auditLogs     AuditLog[]
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([slug])
+}
+
+enum WorkspaceType {
+  PERSONAL
+  TEAM
+  ENTERPRISE
 }
 
 model Account {
@@ -183,6 +226,7 @@ model VerificationToken {
 
 model Calendar {
   id              String   @id @default(cuid())
+  workspaceId     String
   userId          String
   provider        String   // "google" | "microsoft"
   externalId      String   // Calendar ID from provider
@@ -195,6 +239,7 @@ model Calendar {
   lastSyncAt      DateTime?
   syncToken       String?  @db.Text
 
+  workspace       Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   events          CalendarEvent[]
 
@@ -202,6 +247,7 @@ model Calendar {
   updatedAt       DateTime @updatedAt
 
   @@unique([userId, provider, externalId])
+  @@index([workspaceId])
   @@index([userId])
 }
 
@@ -235,6 +281,7 @@ model CalendarEvent {
 
 model Task {
   id              String   @id @default(cuid())
+  workspaceId     String
   userId          String
 
   title           String
@@ -253,6 +300,7 @@ model Task {
   flexibilityScore Float?  // 0-1, how flexible this task is
   energyLevel     EnergyLevel? // LOW | MEDIUM | HIGH
 
+  workspace       Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   scheduleSlot    ScheduleSlot?
 
@@ -260,6 +308,7 @@ model Task {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
+  @@index([workspaceId])
   @@index([userId, status])
   @@index([userId, deadline])
 }
@@ -288,6 +337,7 @@ enum EnergyLevel {
 
 model Schedule {
   id              String   @id @default(cuid())
+  workspaceId     String
   userId          String
 
   startDate       DateTime
@@ -299,12 +349,14 @@ model Schedule {
   aiVersion       String   // Track which AI model/version created this
   confidence      Float    // 0-1, AI confidence in this schedule
 
+  workspace       Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   slots           ScheduleSlot[]
 
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
+  @@index([workspaceId])
   @@index([userId, status])
 }
 
@@ -333,6 +385,199 @@ model ScheduleSlot {
 
   @@index([scheduleId])
   @@index([startTime, endTime])
+}
+
+// ============= Integrations =============
+
+model Integration {
+  id              String   @id @default(cuid())
+  workspaceId     String
+  userId          String
+  type            IntegrationType
+  provider        String   // "todoist" | "asana" | "slack" | "notion" etc.
+
+  // OAuth tokens
+  accessToken     String?  @db.Text
+  refreshToken    String?  @db.Text
+  expiresAt       DateTime?
+
+  // Integration-specific config
+  config          Json     @default("{}")
+
+  isActive        Boolean  @default(true)
+  lastSyncAt      DateTime?
+  syncStatus      String?  // "syncing" | "success" | "error"
+  syncError       String?  @db.Text
+
+  workspace       Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([workspaceId, provider])
+  @@index([workspaceId])
+  @@index([userId])
+}
+
+enum IntegrationType {
+  TASK_MANAGEMENT
+  COMMUNICATION
+  NOTE_TAKING
+  TIME_TRACKING
+}
+
+// ============= Notifications =============
+
+model Notification {
+  id              String   @id @default(cuid())
+  userId          String
+  type            NotificationType
+  title           String
+  message         String   @db.Text
+  link            String?
+
+  isRead          Boolean  @default(false)
+  readAt          DateTime?
+
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt       DateTime @default(now())
+
+  @@index([userId, isRead])
+  @@index([createdAt])
+}
+
+enum NotificationType {
+  SYNC_COMPLETE
+  SYNC_ERROR
+  SCHEDULE_READY
+  TASK_DUE_SOON
+  MEETING_STARTING
+  SYSTEM
+}
+
+// ============= Focus & Productivity =============
+
+model FocusSession {
+  id              String   @id @default(cuid())
+  userId          String
+  taskId          String?
+
+  startTime       DateTime
+  endTime         DateTime?
+  targetDuration  Int      // minutes
+
+  status          FocusStatus @default(IN_PROGRESS)
+  completionRate  Float?   // 0-1, percentage of target completed
+
+  // Settings
+  blockDistractions Boolean @default(true)
+  soundscape      String?  // ambient sound type
+
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([userId])
+  @@index([startTime, endTime])
+}
+
+enum FocusStatus {
+  IN_PROGRESS
+  COMPLETED
+  ABANDONED
+}
+
+// ============= Team Coordination =============
+
+model Booking {
+  id              String   @id @default(cuid())
+  workspaceId     String
+  hostUserId      String
+
+  // Booking page config
+  slug            String   @unique
+  title           String
+  description     String?  @db.Text
+  duration        Int      // minutes
+
+  // Availability
+  availableDays   String[]
+  availableHours  Json     // { "Mon": ["09:00-17:00"], ... }
+
+  // Buffer times
+  bufferBefore    Int      @default(0)  // minutes
+  bufferAfter     Int      @default(0)
+
+  isActive        Boolean  @default(true)
+
+  workspace       Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  bookingSlots    BookingSlot[]
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([workspaceId])
+  @@index([slug])
+}
+
+model BookingSlot {
+  id              String   @id @default(cuid())
+  bookingId       String
+
+  guestName       String
+  guestEmail      String
+
+  startTime       DateTime
+  endTime         DateTime
+
+  status          BookingStatus @default(CONFIRMED)
+  cancelReason    String?  @db.Text
+
+  // Link to calendar event
+  calendarEventId String?
+
+  booking         Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([bookingId])
+  @@index([startTime, endTime])
+  @@index([guestEmail])
+}
+
+enum BookingStatus {
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+// ============= Admin & Audit =============
+
+model AuditLog {
+  id              String   @id @default(cuid())
+  workspaceId     String
+  userId          String
+
+  action          String   // "user.created" | "task.deleted" | "calendar.synced"
+  resource        String   // "User" | "Task" | "Calendar"
+  resourceId      String
+
+  changes         Json?    // Before/after values
+  ipAddress       String?
+  userAgent       String?  @db.Text
+
+  workspace       Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt       DateTime @default(now())
+
+  @@index([workspaceId])
+  @@index([userId])
+  @@index([resource, resourceId])
+  @@index([createdAt])
 }
 ```
 

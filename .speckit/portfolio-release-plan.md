@@ -232,45 +232,49 @@
 | **Initiative 5**: AI Scheduling (V2 - remaining) | Beta | 150 | P0 |
 | **Initiative 6**: Analytics & Insights | Zeta | 120 | P1 |
 | **Initiative 9**: User Success (Phase 2) | Epsilon | 111 | P0 |
-| **Initiative 10**: AI Intelligence | Beta | 213 | P1 |
 | **Initiative 11**: Integrations (Phase 1) | Beta + Gamma | 150 | P1 |
 | **Initiative 12**: Focus & Productivity | Epsilon | 110 | P1 |
 | **Initiative 1**: Content Marketing & SEO | Gamma | 50 | P1 |
 | **Initiative 7**: Platform (APIs, templates) | Gamma | 80 | P2 |
 | **Initiative 8**: Admin (Phase 2 - Billing) | Delta | 70 | P0 |
-| **TOTAL** | All Squads | **1,054** | - |
+| **TOTAL** | All Squads | **841** | - |
+
+**Note**: Initiative 10 (AI Intelligence, 213 pts) moved to PI 3 due to dependency on Initiative 5 completion.
 
 ### Sprint Breakdown
 
-#### Sprint 7-8: AI Intelligence Foundation
-- Energy-based scheduling
-- Meeting fatigue detection
-- Context switching reduction
+#### Sprint 7-8: AI Scheduling V2 & Analytics
+- Complete AI Scheduling Engine (Initiative 5)
+- Dynamic rescheduling
+- Capacity management
+- Personal analytics dashboard
+- Time breakdown visualizations
 - **Points**: 240
 
 #### Sprint 9-10: Integrations Phase 1
-- Todoist integration
+- Todoist integration (2-way sync)
 - Asana integration
 - Linear integration
-- Slack basic integration
+- Slack basic integration (notifications)
 - **Points**: 240
 
-#### Sprint 11-12: Focus Mode & Analytics
-- Focus mode UI
+#### Sprint 11-12: Focus Mode & User Success
+- Focus mode UI with DND
 - Pomodoro timer
-- Personal dashboard
-- Time analytics
+- Help docs expansion (40+ articles)
+- Feature request system
+- NPS surveys
 - **Points**: 240
 
 ### PI 2 Deliverables
-✅ AI 2.0 (energy-based, meeting fatigue, smart suggestions)
+✅ AI Scheduling V2 complete (dynamic rescheduling, capacity management)
 ✅ 4 major integrations (Todoist, Asana, Linear, Slack)
-✅ Focus mode with Pomodoro
-✅ Analytics dashboard
-✅ Billing & subscription (Stripe)
-✅ Blog (3 SEO-optimized posts)
-✅ Dark mode
-✅ Keyboard shortcuts & command palette
+✅ Focus mode with Pomodoro timer
+✅ Analytics dashboard (time breakdown, productivity insights)
+✅ Billing & subscription (Stripe integration)
+✅ Blog (5+ SEO-optimized posts)
+✅ User success improvements (expanded help docs, feature requests, NPS)
+✅ Platform APIs & templates
 
 ### PI 2 Success Metrics
 - 5,000 active users (5x growth)
@@ -291,51 +295,51 @@
 1. Scale to 10,000 users
 2. Launch team features (unlock B2B revenue)
 3. Complete admin panel and security features
-4. Achieve $200K ARR
+4. **Ship AI Intelligence 2.0** (energy-based, meeting fatigue, context switching)
+5. Achieve $200K ARR
 
 ### Initiatives
 
 | Initiative | Squad | Story Points | Priority |
 |------------|-------|--------------|----------|
+| **Initiative 10**: AI Intelligence & Learning | Beta | 213 | P1 |
 | **Initiative 8**: Admin (Phase 3 - Security) | Delta | 175 | P0 |
 | **Initiative 11**: Integrations (Phase 2) | Beta + Gamma | 117 | P1 |
 | **Initiative 13**: Team Coordination | Delta + Alpha | 267 | P1 |
 | **Initiative 15**: Enterprise Security (start) | Delta | 150 | P1 |
 | **Initiative 20**: Growth & Virality | Epsilon | 76 | P1 |
 | **Initiative 7**: Platform (remaining) | Gamma | 80 | P2 |
-| **TOTAL** | All Squads | **865** | - |
+| **TOTAL** | All Squads | **1,078** | - |
+
+**Note**: Initiative 10 moved from PI 2 due to dependency on Initiative 5 (AI Engine) completing in Sprint 11.
 
 ### Sprint Breakdown
 
-#### Sprint 13-14: Team Features Foundation
-- Team calendar view
-- Find meeting time algorithm
-- Meeting scheduler (Calendly-style)
+#### Sprint 13-14: AI Intelligence & Team Features
+- **AI Intelligence (Initiative 10)**: Energy-based scheduling, task energy classification, meeting load analysis, back-to-back detection
+- **Team Coordination**: Team calendar view, find meeting time algorithm
 - **Points**: 240
 
-#### Sprint 15-16: Team Management & Admin Security
-- Task assignment & dependencies
-- Team capacity view
-- 2FA, session management
-- Audit logging
+#### Sprint 15-16: AI Learning & Team Management
+- **AI Intelligence (Initiative 10)**: Energy pattern learning, meeting fatigue score, smart meeting recommendations
+- **Team Coordination**: Task assignment, team capacity view, dependencies
+- **Admin Security**: 2FA, session management, audit logging
 - **Points**: 240
 
-#### Sprint 17-18: Growth & Expansion
-- Referral program
-- Affiliate program
-- Public roadmap
-- Changelog
-- More integrations (Notion, Toggl)
+#### Sprint 17-18: Context Switching & Growth
+- **AI Intelligence (Initiative 10)**: Task similarity detection, batching algorithm, flow state tracking
+- **Growth**: Referral program, affiliate program, public roadmap, changelog
+- **Integrations**: Notion (2-way sync), Toggl (time tracking)
 - **Points**: 240
 
 ### PI 3 Deliverables
-✅ Team calendar and meeting scheduler
+✅ **AI Intelligence 2.0** (energy-based, meeting fatigue, context switching, learning)
+✅ Team calendar and meeting scheduler (Calendly-style)
 ✅ Team task assignment and capacity management
-✅ Admin panel complete (security, audit logs, GDPR)
-✅ 2FA and session management
+✅ Admin panel complete (security, audit logs, GDPR, 2FA)
 ✅ Referral and affiliate programs
-✅ 7 total integrations
-✅ Growth loops (virality)
+✅ 9 total integrations (including Notion, Toggl, Jira)
+✅ Growth loops and virality mechanisms
 
 ### PI 3 Success Metrics
 - 10,000 active users (2x growth)

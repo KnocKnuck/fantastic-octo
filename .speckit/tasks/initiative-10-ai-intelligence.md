@@ -2,10 +2,13 @@
 
 **Goal**: Transform from basic scheduling to truly intelligent AI that learns user patterns and optimizes productivity
 **Business Value**: Create competitive moat through ML-powered insights that competitors can't easily replicate
-**Timeline**: Q2 2026 (Weeks 9-18)
+**Timeline**: Q2-Q3 2026 (Weeks 13-20) - **MOVED from Weeks 9-18**
 **Status**: 🔵 Not Started
 **Owner**: AI/ML Lead + Product Manager 1
-**Squad**: Squad Delta (AI & Intelligence)
+**Squad**: Squad Beta (AI & Intelligence)
+**Critical Dependencies**: Initiative 5 (AI Scheduling Engine) must be complete first
+
+> **⚠️ DEPENDENCY**: This initiative extends the AI Scheduling Engine (Initiative 5). Must start AFTER Initiative 5 completes in Sprint 11.
 
 > Strategic differentiator. Competitors do basic scheduling. We do intelligent, adaptive, learning scheduling.
 
@@ -33,7 +36,7 @@
 - [ ] Default: Morning person if not specified
 
 **Story Points**: 5
-**Sprint**: Sprint 9
+**Sprint**: Sprint 13
 **Status**: 🔵 Not Started
 **Priority**: P1
 **Assignee**: Frontend Specialist 1, AI/ML Engineer 1
@@ -62,7 +65,7 @@
   - 💤 Low energy
 
 **Story Points**: 8
-**Sprint**: Sprint 9
+**Sprint**: Sprint 13
 **Status**: 🔵 Not Started
 **Priority**: P1
 **Assignee**: AI/ML Engineer 1, Backend Engineer 2
@@ -87,11 +90,11 @@
 - [ ] Algorithm explanation: "Scheduled during your peak morning hours"
 
 **Story Points**: 13
-**Sprint**: Sprint 10
+**Sprint**: Sprint 14
 **Status**: 🔵 Not Started
 **Priority**: P1
 **Assignee**: AI/ML Engineer 1, AI/ML Engineer 2
-**Dependencies**: Stories 10.1.1, 10.1.2
+**Dependencies**: Stories 10.1.1, 10.1.2, Initiative 5 (AI Scheduling Engine)
 
 ---
 
@@ -116,7 +119,7 @@
 - [ ] Confidence score (low confidence = keep asking)
 
 **Story Points**: 21
-**Sprint**: Sprint 11
+**Sprint**: Sprint 15
 **Status**: 🔵 Not Started
 **Priority**: P1
 **Assignee**: AI/ML Engineer 2, Data Scientist
@@ -144,7 +147,7 @@
 - [ ] Export data (CSV)
 
 **Story Points**: 8
-**Sprint**: Sprint 11
+**Sprint**: Sprint 15
 **Status**: 🔵 Not Started
 **Priority**: P2
 **Assignee**: Frontend Specialist 2, Data Analyst
@@ -178,7 +181,7 @@
 - [ ] Historical trend chart
 
 **Story Points**: 13
-**Sprint**: Sprint 10
+**Sprint**: Sprint 14
 **Status**: 🔵 Not Started
 **Priority**: P1
 **Assignee**: Backend Engineer 2, Data Analyst
@@ -204,7 +207,7 @@
 - [ ] Weekly summary: "You had 4 days with back-to-back meetings"
 
 **Story Points**: 8
-**Sprint**: Sprint 10
+**Sprint**: Sprint 14
 **Status**: 🔵 Not Started
 **Priority**: P1
 **Assignee**: Backend Engineer 2, Frontend Specialist 1
@@ -231,7 +234,7 @@
 - [ ] Alert if score > 60: "Meeting fatigue is high. Consider declining meetings."
 
 **Story Points**: 13
-**Sprint**: Sprint 11
+**Sprint**: Sprint 15
 **Status**: 🔵 Not Started
 **Priority**: P1
 **Assignee**: AI/ML Engineer 1, Backend Engineer 2
@@ -261,7 +264,7 @@
 - [ ] Track recommendation acceptance rate
 
 **Story Points**: 13
-**Sprint**: Sprint 11
+**Sprint**: Sprint 15
 **Status**: 🔵 Not Started
 **Priority**: P1
 **Assignee**: AI/ML Engineer 2, Backend Engineer 2

@@ -5,6 +5,126 @@
 **Timeline**: Q4 2025 (Complete)
 **Status**: ✅ Done
 
+## Feature 1.0: Infrastructure Foundation
+
+**Description**: Core infrastructure services required by all other initiatives
+
+### Story 1.0.1: Background Job System
+**As a** system
+**I want** a background job queue
+**So that** long-running tasks don't block API requests
+
+**Acceptance Criteria**:
+- [ ] Inngest installed and configured
+- [ ] Event system for background jobs
+- [ ] Job queues for: calendar sync, email notifications, AI scheduling
+- [ ] Retry logic with exponential backoff
+- [ ] Job monitoring dashboard (Inngest UI)
+- [ ] Error handling and dead letter queue
+- [ ] Performance: < 1s job enqueue time
+
+**Story Points**: 8
+**Sprint**: Sprint 1
+**Status**: 🔵 Not Started
+**Priority**: P0 (CRITICAL - Required by Initiatives 3, 5, 9, 11)
+**Dependencies**: None
+
+---
+
+### Story 1.0.2: Rate Limiting & API Security
+**As a** system
+**I want** rate limiting on all API endpoints
+**So that** the service is protected from abuse
+
+**Acceptance Criteria**:
+- [ ] Rate limiting middleware using Upstash Redis
+- [ ] Limits: 100 req/min per IP (public), 1000 req/min (authenticated)
+- [ ] Custom limits for sensitive endpoints (auth: 5/min)
+- [ ] Rate limit headers (X-RateLimit-*)
+- [ ] 429 Too Many Requests responses
+- [ ] IP allowlist for internal services
+- [ ] Redis fallback if unavailable (allow through with logging)
+
+**Story Points**: 5
+**Sprint**: Sprint 1
+**Status**: 🔵 Not Started
+**Priority**: P0 (CRITICAL - Security requirement)
+**Dependencies**: None
+
+---
+
+### Story 1.0.3: Real-Time Infrastructure (WebSocket)
+**As a** system
+**I want** real-time communication infrastructure
+**So that** users see updates without refreshing
+
+**Acceptance Criteria**:
+- [ ] Pusher or Ably integrated
+- [ ] WebSocket channels for:
+  - Calendar sync status
+  - Task updates
+  - Schedule generation progress
+  - Notifications
+- [ ] Fallback to polling if WebSocket unavailable
+- [ ] Authentication on WebSocket connections
+- [ ] Reconnection logic with exponential backoff
+- [ ] Client SDK wrapper for easy usage
+
+**Story Points**: 13
+**Sprint**: Sprint 1
+**Status**: 🔵 Not Started
+**Priority**: P1 (Should have for good UX)
+**Dependencies**: None
+
+---
+
+### Story 1.0.4: Caching Layer
+**As a** system
+**I want** caching for expensive queries
+**So that** API response times are fast
+
+**Acceptance Criteria**:
+- [ ] Redis caching via Upstash
+- [ ] Cache strategy for:
+  - User preferences (5 min TTL)
+  - Calendar events (1 min TTL)
+  - Task lists (30 sec TTL)
+  - Schedule calculations (5 min TTL)
+- [ ] Cache invalidation on updates
+- [ ] Cache-Control headers on responses
+- [ ] Cache hit/miss metrics
+- [ ] Graceful degradation if Redis unavailable
+
+**Story Points**: 8
+**Sprint**: Sprint 1
+**Status**: 🔵 Not Started
+**Priority**: P1 (Should have for performance)
+**Dependencies**: None
+
+---
+
+### Story 1.0.5: Workspace & Multi-Tenancy Model
+**As a** system
+**I want** proper workspace isolation
+**So that** team features are properly scoped
+
+**Acceptance Criteria**:
+- [ ] Workspace model added to Prisma schema
+- [ ] Every user belongs to a workspace (personal or team)
+- [ ] All data models include workspaceId
+- [ ] Row-level security in all queries (WHERE workspaceId = ?)
+- [ ] Migration to add workspaceId to existing data
+- [ ] Workspace context middleware
+- [ ] Performance: No N+1 queries, < 50ms overhead
+
+**Story Points**: 13
+**Sprint**: Sprint 1
+**Status**: 🔵 Not Started
+**Priority**: P0 (CRITICAL - Required by Initiatives 8, 13)
+**Dependencies**: None
+
+---
+
 ## Feature 1.1: Marketing Landing Page ✅
 
 **Description**: Public-facing website to present product value proposition and capture beta signups
