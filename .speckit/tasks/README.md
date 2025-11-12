@@ -24,6 +24,8 @@
 | [Integrations Ecosystem](#initiative-11) | 4 | 16 | 🔵 | P1 | [initiative-11-integrations.md](./initiative-11-integrations.md) |
 | [Focus & Productivity Tools](#initiative-12) | 3 | 10 | 🔵 | P1 | [initiative-12-focus-productivity.md](./initiative-12-focus-productivity.md) |
 | [Team Coordination & Meetings](#initiative-13) | 4 | 16 | 🔵 | P1 | [initiative-13-team-coordination.md](./initiative-13-team-coordination.md) |
+| [Marketing & Brand Awareness](#initiative-14) | 8 | 24 | 🔵 | P1 | [initiative-14-marketing-brand.md](./initiative-14-marketing-brand.md) |
+| [Community & Developer Relations](#initiative-15) | 7 | 19 | 🔵 | P1 | [initiative-15-community-devrel.md](./initiative-15-community-devrel.md) |
 
 ---
 
@@ -121,6 +123,20 @@ Focus mode (full-screen, DND, ambient sounds), Pomodoro timer integration (25-mi
 
 Team calendar view (see everyone's availability), meeting scheduler like Calendly (booking pages, slots), team task assignment (capacity view, dependencies, Kanban board), team analytics dashboard (productivity, meeting culture, bottlenecks)
 
+### <a name="initiative-14"></a>Initiative 14: Marketing & Brand Awareness
+**Goal**: Build recognizable brand and drive customer acquisition through multi-channel marketing
+**Timeline**: Q2-Q3 2026 (Weeks 13-26)
+**Status**: 🔵 Not Started
+
+Brand identity and positioning, website optimization (CRO, A/B testing), social media marketing (Twitter, LinkedIn, Reddit, HN), paid acquisition (Google Ads, Facebook, LinkedIn), PR and media outreach (Product Hunt, TechCrunch), influencer partnerships, launch campaigns, event marketing (webinars, conferences)
+
+### <a name="initiative-15"></a>Initiative 15: Community & Developer Relations
+**Goal**: Build engaged community, foster developer ecosystem, and turn users into advocates
+**Timeline**: Q3-Q4 2026 (Weeks 19-32)
+**Status**: 🔵 Not Started
+
+Community platforms (Discord, forum), developer documentation and API marketing, integration marketplace (Zapier, partner integrations), user testimonials and case studies, beta program and early access, ambassador and referral programs, user-generated content campaigns, building in public
+
 ---
 
 ## Sprint Planning
@@ -162,19 +178,26 @@ Team calendar view (see everyone's availability), meeting scheduler like Calendl
 ---
 
 **Last Updated**: 2025-11-12
-**Version**: 4.1 (40-Person Team, Enterprise-Ready, Optimized)
-**Total Initiatives**: 13 core + 7 future expansion
-**Total Stories**: 190+ (added infrastructure, removed duplicates)
-**Total Story Points**: 2,559+ (core initiatives)
-**Team Size**: 40 people (6 cross-functional squads)
+**Version**: 4.2 (Marketing & Community Expansion)
+**Total Initiatives**: 15 core (13 product + 2 marketing/growth)
+**Total Stories**: 247+ (added 14 content marketing + 24 marketing + 19 community stories)
+**Total Story Points**: 3,022+ (core initiatives)
+**Team Size**: 40 people (6 cross-functional squads + marketing team)
 **Estimated Timeline**: 12-18 months to market-leading product
 
-**Recent Changes (v4.1)**:
-- ✅ Added Feature 1.0: Infrastructure Foundation (5 critical stories: background jobs, rate limiting, WebSocket, caching, workspace multi-tenancy)
-- ✅ Fixed Initiative 10 timeline (moved from Sprint 9 to Sprint 13 due to dependency on Initiative 5)
-- ✅ Updated database schema with Workspace, Integration, Notification, FocusSession, Booking, AuditLog models
-- ✅ Removed duplicate onboarding story from Initiative 2 (now in Initiative 9)
-- ✅ Balanced Squad Beta workload in PI 2 (was 183% overloaded, now 100%)
+**Recent Changes (v4.2)**:
+- ✅ **EXPANDED Initiative 1, Feature 1.3**: Content Marketing & SEO Engine (from 2 stories to 14 comprehensive stories, +140 points)
+  - Added: 24-month content calendar, link building, email marketing (onboarding/engagement/winback), video strategy, podcasts, case studies, analytics
+- ✅ **NEW Initiative 14**: Marketing & Brand Awareness (8 features, 24 stories, 258 points)
+  - Brand identity, website optimization, social media, paid ads, PR, influencer marketing, launches, events
+- ✅ **NEW Initiative 15**: Community & Developer Relations (7 features, 19 stories, 205 points)
+  - Discord/forum, developer docs, API marketing, integration marketplace, testimonials, beta program, ambassadors, UGC campaigns
+
+**Previous Changes (v4.1)**:
+- ✅ Added Feature 1.0: Infrastructure Foundation (5 critical stories)
+- ✅ Fixed Initiative 10 timeline
+- ✅ Updated database schema with 7 new models
+- ✅ Removed duplicates and balanced squad workloads
 
 ---
 

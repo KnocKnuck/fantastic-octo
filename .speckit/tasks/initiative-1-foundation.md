@@ -304,24 +304,31 @@
 
 ---
 
-## Feature 1.3: Content Marketing Foundation
+## Feature 1.3: Content Marketing & SEO Engine
 
-**Description**: Create content to drive organic traffic and establish authority
+**Description**: Comprehensive content marketing strategy to drive organic traffic, establish authority, and build audience
 
-### Story 1.3.1: Blog Setup & First Posts
+### Story 1.3.1: Blog Infrastructure & First Posts
 **As a** potential user searching for productivity tips
 **I want** to find helpful content
 **So that** I discover the product organically
 
 **Acceptance Criteria**:
 - [ ] Set up blog at `/blog` with Next.js MDX
-- [ ] Create 3 initial posts:
+- [ ] RSS feed implementation
+- [ ] Author profiles system
+- [ ] Article categories and tags
+- [ ] Reading time calculator
+- [ ] Related posts recommendations
+- [ ] Social sharing buttons
+- [ ] Create 5 initial posts:
   - "How to Stop Wasting Time on Calendar Planning"
   - "AI vs. Manual Scheduling: Time Savings Breakdown"
   - "5 Signs You Need an AI Calendar Assistant"
-- [ ] Each post 1000+ words
-- [ ] SEO optimized (keywords, meta, internal links)
-- [ ] CTA at end of each post
+  - "The Ultimate Guide to Time Blocking in 2026"
+  - "How Successful People Manage Their Calendar"
+- [ ] Each post 1500+ words, SEO optimized
+- [ ] CTA at end of each post (trial signup)
 
 **Story Points**: 13
 **Sprint**: Sprint 2
@@ -330,22 +337,422 @@
 
 ---
 
-### Story 1.3.2: SEO Content Strategy
+### Story 1.3.2: Comprehensive SEO Strategy
 **As a** marketing lead
-**I want** a content roadmap
-**So that** we consistently attract organic traffic
+**I want** a data-driven SEO strategy
+**So that** we rank for high-intent keywords
 
 **Acceptance Criteria**:
-- [ ] Keyword research (50+ target keywords)
-- [ ] Content calendar (12 months)
-- [ ] Competitor analysis (Motion, Reclaim, Todoist)
-- [ ] Link building strategy
-- [ ] Guest post targets identified
+- [ ] Keyword research (50+ target keywords) using Ahrefs/SEMrush:
+  - **High-intent commercial** (10): "ai calendar app", "automatic scheduling tool", "calendar automation software"
+  - **Problem-aware** (15): "how to organize my schedule", "calendar management tips", "time blocking app"
+  - **Comparison** (10): "motion vs reclaim", "best calendar app for productivity", "todoist alternatives"
+  - **Long-tail** (15+): "how to stop context switching", "meeting fatigue solutions", "best app for ADHD scheduling"
+- [ ] Competitor SEO analysis:
+  - Motion.com (top pages, backlinks, keywords)
+  - Reclaim.ai (content strategy, ranking keywords)
+  - Todoist.com (authority metrics, link profile)
+  - Trevor.ai, SkedPal, TimeHero
+- [ ] On-page SEO checklist (title tags, meta descriptions, schema markup, internal linking)
+- [ ] Technical SEO audit (sitemap, robots.txt, page speed, mobile optimization)
+- [ ] Local SEO setup (Google Business Profile if applicable)
 
 **Story Points**: 8
 **Sprint**: Sprint 2
 **Status**: 🔵 Not Started
+**Priority**: P1
+
+---
+
+### Story 1.3.3: 24-Month Content Calendar
+**As a** content marketing manager
+**I want** a comprehensive content calendar
+**So that** we publish consistently and cover all topics
+
+**Acceptance Criteria**:
+- [ ] Content calendar with 200+ article ideas (2-3 posts/week for 24 months)
+- [ ] Content pillars defined:
+  - **Productivity & Time Management** (30%): Time blocking, deep work, Pomodoro
+  - **Calendar Optimization** (25%): Scheduling tips, meeting management, calendar hygiene
+  - **AI & Automation** (20%): AI scheduling benefits, automation workflows
+  - **Work-Life Balance** (15%): Preventing burnout, setting boundaries, focus time
+  - **Comparison & Alternatives** (10%): Tool comparisons, migration guides
+- [ ] Content types mix:
+  - How-to guides (40%)
+  - Listicles (20%)
+  - Case studies (15%)
+  - Expert roundups (10%)
+  - Product comparisons (10%)
+  - Thought leadership (5%)
+- [ ] Seasonal content planned (New Year resolutions, back-to-school, Q4 planning)
+- [ ] Content mapped to buyer journey (awareness → consideration → decision)
+- [ ] Editorial workflow defined (ideation → outline → draft → edit → publish → promote)
+
+**Story Points**: 8
+**Sprint**: Sprint 3
+**Status**: 🔵 Not Started
+**Priority**: P1
+
+---
+
+### Story 1.3.4: Content Production System
+**As a** content team
+**I want** efficient content production workflows
+**So that** we maintain quality and consistency
+
+**Acceptance Criteria**:
+- [ ] Content brief template (target keyword, search intent, outline, word count, CTA)
+- [ ] Writer guidelines document (tone, style, formatting, SEO best practices)
+- [ ] Content review checklist (accuracy, SEO, readability, CTAs)
+- [ ] Image creation workflow (featured images, in-post graphics, infographics)
+- [ ] Content repository in Notion/Airtable
+- [ ] Approval workflow (draft → review → publish)
+- [ ] Content performance tracking template
+- [ ] Outsourcing strategy:
+  - Freelance writer vetting criteria
+  - Writer onboarding process
+  - Payment structure ($0.10-0.15/word)
+
+**Story Points**: 5
+**Sprint**: Sprint 3
+**Status**: 🔵 Not Started
+**Priority**: P1
+
+---
+
+### Story 1.3.5: Link Building Strategy
+**As a** SEO manager
+**I want** high-quality backlinks
+**So that** we increase domain authority and rankings
+
+**Acceptance Criteria**:
+- [ ] Guest post target list (50+ sites):
+  - Productivity blogs (Lifehacker, FastCompany, Entrepreneur)
+  - Tech publications (TechCrunch, VentureBeat, Product Hunt Blog)
+  - Industry blogs (GetApp, Capterra, G2 Learning Hub)
+- [ ] Guest post pitch templates (3 variations)
+- [ ] Guest post content plan (20 articles in Year 1)
+- [ ] Broken link building:
+  - Find broken links on competitor sites
+  - Create replacement content
+  - Outreach to webmasters
+- [ ] Resource page link building (identify "best tools" pages)
+- [ ] Digital PR strategy:
+  - HARO (Help A Reporter Out) responses
+  - Expert contributions
+  - Original research/surveys for press coverage
+- [ ] Unlinked brand mentions strategy
+- [ ] Link building outreach templates and tracking
+
+**Story Points**: 13
+**Sprint**: Sprint 4
+**Status**: 🔵 Not Started
 **Priority**: P2
+
+---
+
+### Story 1.3.6: Content Distribution Strategy
+**As a** growth marketer
+**I want** multi-channel content distribution
+**So that** our content reaches maximum audience
+
+**Acceptance Criteria**:
+- [ ] Social media distribution plan:
+  - Twitter: Key insights + link (daily)
+  - LinkedIn: Professional tips + link (3x/week)
+  - Reddit: Participate in r/productivity, r/ADHD, r/entrepreneur (1x/week, no spam)
+  - Hacker News: Submit relevant technical articles
+  - Indie Hackers: Share building journey
+- [ ] Content repurposing workflow:
+  - Blog post → Twitter thread
+  - Blog post → LinkedIn carousel
+  - Blog post → YouTube video script
+  - Blog post → Podcast talking points
+  - Long-form guide → Email course
+- [ ] Newsletter distribution:
+  - Share new content with subscribers
+  - Weekly digest format
+- [ ] Syndication strategy:
+  - Medium (republish with canonical tag)
+  - Dev.to (for technical content)
+  - LinkedIn Articles
+- [ ] Community sharing guidelines (no spam, provide value first)
+
+**Story Points**: 8
+**Sprint**: Sprint 4
+**Status**: 🔵 Not Started
+**Priority**: P1
+
+---
+
+### Story 1.3.7: Pillar Content & Resource Hubs
+**As a** potential user
+**I want** comprehensive guides
+**So that** I can learn everything about a topic
+
+**Acceptance Criteria**:
+- [ ] Create 5 pillar pages (3000-5000 words each):
+  - "The Complete Guide to AI-Powered Calendar Management"
+  - "Time Blocking: The Ultimate Guide for Productivity"
+  - "How to Eliminate Meeting Fatigue: A Comprehensive Guide"
+  - "Calendar Automation: Everything You Need to Know"
+  - "The Science of Deep Work and Focus Time"
+- [ ] Each pillar links to 10-15 supporting articles
+- [ ] Internal linking strategy (hub-and-spoke model)
+- [ ] Downloadable resources (PDFs, templates, checklists)
+- [ ] Lead magnets embedded (email signup for bonus content)
+- [ ] Visual content (infographics, diagrams, screenshots)
+- [ ] Video embeds where appropriate
+- [ ] Schema markup for articles
+
+**Story Points**: 21
+**Sprint**: Sprint 5-6
+**Status**: 🔵 Not Started
+**Priority**: P2
+
+---
+
+### Story 1.3.8: Email Marketing - Onboarding Sequence
+**As a** new subscriber
+**I want** valuable emails
+**So that** I learn about the product and get started
+
+**Acceptance Criteria**:
+- [ ] Onboarding email sequence (7 emails over 14 days):
+  - **Day 0**: Welcome + Account setup instructions
+  - **Day 1**: "How to Connect Your First Calendar" (tutorial)
+  - **Day 2**: "5 Ways AI Calendar Agent Saves Time" (benefits)
+  - **Day 3**: "Quick Start Guide" (best practices)
+  - **Day 5**: "Advanced Features You Should Try" (power user tips)
+  - **Day 7**: Case study or success story
+  - **Day 14**: "Are you getting value?" (feedback request + upgrade CTA)
+- [ ] Behavioral triggers:
+  - Completed first task → Send congratulations + next step
+  - Connected calendar → Send scheduling tutorial
+  - Generated first schedule → Send optimization tips
+  - Inactive for 3 days → Send re-engagement email
+- [ ] Email templates designed (mobile-responsive, branded)
+- [ ] Unsubscribe options and preferences center
+
+**Story Points**: 13
+**Sprint**: Sprint 5
+**Status**: 🔵 Not Started
+**Priority**: P1
+
+---
+
+### Story 1.3.9: Email Marketing - Engagement & Retention
+**As a** active user
+**I want** helpful content in my inbox
+**So that** I stay engaged and get more value
+
+**Acceptance Criteria**:
+- [ ] Weekly newsletter "Productivity Pulse":
+  - 1 new blog post
+  - 1 productivity tip
+  - 1 feature highlight
+  - Community spotlight
+- [ ] Monthly product updates:
+  - New features released
+  - Upcoming roadmap
+  - Usage statistics ("You saved X hours this month!")
+- [ ] Engagement campaigns:
+  - Power user tips series (5 emails)
+  - Integration tutorials (Google Calendar, Outlook, Todoist)
+  - Productivity challenge (30-day time blocking challenge)
+- [ ] Segmentation strategy:
+  - Free users: Focus on activation and upgrade
+  - Paid users: Focus on retention and referrals
+  - Power users: Focus on advocacy and feedback
+- [ ] Email metrics dashboard:
+  - Open rate (target: 25%+)
+  - Click-through rate (target: 5%+)
+  - Unsubscribe rate (target: <1%)
+
+**Story Points**: 13
+**Sprint**: Sprint 6
+**Status**: 🔵 Not Started
+**Priority**: P1
+
+---
+
+### Story 1.3.10: Email Marketing - Winback & Reactivation
+**As a** churned or inactive user
+**I want** reasons to come back
+**So that** I can re-engage with the product
+
+**Acceptance Criteria**:
+- [ ] Inactivity detection:
+  - No login for 7 days → Send gentle reminder
+  - No login for 14 days → Send "We miss you" with benefit reminder
+  - No login for 30 days → Send winback offer
+- [ ] Winback email sequence (3 emails):
+  - **Email 1**: "We noticed you haven't been around" (empathy + ask why)
+  - **Email 2**: "Here's what's new" (new features, improvements)
+  - **Email 3**: "Special offer to come back" (discount or bonus features)
+- [ ] Cancellation prevention:
+  - Cancel intent detected → Send "Before you go" (feedback + offer)
+  - After cancellation → Send exit survey
+  - 30 days after cancel → Send "We've improved" (feature updates)
+- [ ] Upgrade campaigns for free users:
+  - Hit feature limits → Send upgrade nudge
+  - Used product for 14 days → Send Pro benefits
+  - Approaching limit → Send proactive upgrade offer
+- [ ] Win-back metrics tracked:
+  - Reactivation rate
+  - Time to reactivate
+  - Lifetime value of reactivated users
+
+**Story Points**: 8
+**Sprint**: Sprint 7
+**Status**: 🔵 Not Started
+**Priority**: P2
+
+---
+
+### Story 1.3.11: Video Content Strategy
+**As a** visual learner
+**I want** video tutorials
+**So that** I can learn faster
+
+**Acceptance Criteria**:
+- [ ] YouTube channel setup (branding, descriptions, playlists)
+- [ ] Video content plan (24 videos in Year 1):
+  - **Product tutorials** (10): Getting started, features, integrations
+  - **Productivity tips** (8): Time blocking, meeting management, focus techniques
+  - **Behind-the-scenes** (3): Building in public, founder story
+  - **Customer stories** (3): Case studies, success stories
+- [ ] Video formats:
+  - Screen recordings with voiceover (tutorials)
+  - Talking head (thought leadership)
+  - Animated explainers (complex concepts)
+- [ ] Video SEO optimization:
+  - Keywords in title, description, tags
+  - Chapters and timestamps
+  - Transcripts and closed captions
+- [ ] Cross-promotion:
+  - Embed videos in blog posts
+  - Share clips on social media
+  - Include in email campaigns
+- [ ] Engagement tactics:
+  - CTAs in video (subscribe, visit website, trial)
+  - Comment engagement
+  - Community posts
+
+**Story Points**: 13
+**Sprint**: Sprint 8
+**Status**: 🔵 Not Started
+**Priority**: P2
+
+---
+
+### Story 1.3.12: Podcast Strategy
+**As a** podcast listener
+**I want** to learn from experts
+**So that** I discover the product while getting value
+
+**Acceptance Criteria**:
+- [ ] Podcast research:
+  - Identify 50+ podcasts (productivity, tech, entrepreneurship)
+  - Prioritize by audience size and relevance
+- [ ] Guest appearance pitch:
+  - Media kit (founder bio, headshots, speaking topics)
+  - Pitch templates
+  - Outreach to podcast hosts
+- [ ] Target podcasts:
+  - The Tim Ferriss Show, Huberman Lab (aspirational)
+  - Deep Questions with Cal Newport
+  - The Productivity Show, Beyond the To-Do List
+  - Indie Hackers, My First Million
+- [ ] Own podcast consideration (Year 2):
+  - "The AI-Powered Productivity Podcast"
+  - Interview power users, productivity experts
+  - 20-30 min episodes, weekly
+- [ ] Podcast promotion plan:
+  - Share episode links on social
+  - Create blog post from interview
+  - Include in email newsletter
+
+**Story Points**: 8
+**Sprint**: Sprint 9
+**Status**: 🔵 Not Started
+**Priority**: P3
+
+---
+
+### Story 1.3.13: Case Studies & Customer Stories
+**As a** potential customer
+**I want** to see real results
+**So that** I trust the product works
+
+**Acceptance Criteria**:
+- [ ] Case study template:
+  - Customer background (role, company, challenges)
+  - Solution (how they use the product)
+  - Results (metrics: time saved, productivity increased)
+  - Quote and photo
+- [ ] Create 10 detailed case studies:
+  - **Individual contributors**: Developer, designer, writer, marketer
+  - **Managers**: Engineering manager, product manager
+  - **Executives**: Founder, CEO
+  - **Specific use cases**: ADHD user, remote team, consultant
+- [ ] Case study formats:
+  - Written (1000-1500 words)
+  - Video testimonial (2-3 min)
+  - Infographic (one-pager)
+- [ ] Distribution:
+  - Dedicated case studies page on website
+  - Feature in blog content
+  - Social media highlights
+  - Sales enablement (share with prospects)
+- [ ] Success metrics to highlight:
+  - Hours saved per week
+  - Meetings reduced
+  - Tasks completed
+  - Stress reduction
+
+**Story Points**: 13
+**Sprint**: Sprint 10
+**Status**: 🔵 Not Started
+**Priority**: P2
+
+---
+
+### Story 1.3.14: Content Performance Analytics
+**As a** content marketing manager
+**I want** to track content performance
+**So that** I can optimize our strategy
+
+**Acceptance Criteria**:
+- [ ] Analytics dashboard setup:
+  - Google Analytics 4 (traffic, engagement, conversions)
+  - Google Search Console (rankings, clicks, impressions)
+  - Ahrefs/SEMrush (backlinks, domain authority, keyword rankings)
+- [ ] Key metrics tracked:
+  - **Traffic**: Pageviews, unique visitors, traffic sources
+  - **Engagement**: Avg time on page, bounce rate, pages per session
+  - **SEO**: Keyword rankings, organic traffic growth, backlinks
+  - **Conversions**: Email signups, trial starts, demo requests
+  - **Email**: Open rate, click rate, conversion rate
+- [ ] Monthly performance reports:
+  - Top performing content
+  - Traffic trends
+  - Keyword ranking changes
+  - Conversion funnel analysis
+  - ROI calculation (content cost vs leads generated)
+- [ ] A/B testing:
+  - Headlines (which drives more clicks)
+  - CTAs (which converts better)
+  - Content formats (long-form vs short-form)
+- [ ] Content optimization process:
+  - Update underperforming posts
+  - Refresh old content (keep current)
+  - Improve internal linking
+
+**Story Points**: 8
+**Sprint**: Sprint 7
+**Status**: 🔵 Not Started
+**Priority**: P1
 
 ---
 

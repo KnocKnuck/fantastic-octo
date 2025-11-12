@@ -10,11 +10,12 @@
 ## 📊 Portfolio Overview
 
 ### Total Scope
-- **13 Core Initiatives** (Must launch with)
-- **7 Strategic Initiatives** (Competitive differentiation)
+- **13 Core Product Initiatives** (Must launch with)
+- **2 Marketing & Growth Initiatives** (Customer acquisition and community)
+- **5 Strategic/Future Initiatives** (Expansion and scale)
 - **Total**: 20 Initiatives
-- **Total Story Points**: ~3,512 points
-- **Timeline**: 18 months (with 40-person team)
+- **Total Story Points**: ~3,600+ points (core + marketing)
+- **Timeline**: 18-24 months (with 40-person team)
 
 ### Team Capacity
 - **6 Squads** x **40 points/sprint average** = **240 points/sprint** (combined)
@@ -234,12 +235,15 @@
 | **Initiative 9**: User Success (Phase 2) | Epsilon | 111 | P0 |
 | **Initiative 11**: Integrations (Phase 1) | Beta + Gamma | 150 | P1 |
 | **Initiative 12**: Focus & Productivity | Epsilon | 110 | P1 |
-| **Initiative 1**: Content Marketing & SEO | Gamma | 50 | P1 |
+| **Initiative 1**: Content Marketing & SEO (expanded) | Marketing Team | 140 | P1 |
+| **Initiative 14**: Marketing & Brand (Phase 1) | Marketing Team | 130 | P1 |
 | **Initiative 7**: Platform (APIs, templates) | Gamma | 80 | P2 |
 | **Initiative 8**: Admin (Phase 2 - Billing) | Delta | 70 | P0 |
-| **TOTAL** | All Squads | **841** | - |
+| **TOTAL** | All Squads | **1,051** | - |
 
-**Note**: Initiative 10 (AI Intelligence, 213 pts) moved to PI 3 due to dependency on Initiative 5 completion.
+**Notes**:
+- Initiative 10 (AI Intelligence, 213 pts) moved to PI 3 due to dependency on Initiative 5 completion
+- Marketing initiatives (1.3 expansion + Initiative 14 Phase 1) begin in PI 2 to prepare for growth phase
 
 ### Sprint Breakdown
 
@@ -306,12 +310,15 @@
 | **Initiative 8**: Admin (Phase 3 - Security) | Delta | 175 | P0 |
 | **Initiative 11**: Integrations (Phase 2) | Beta + Gamma | 117 | P1 |
 | **Initiative 13**: Team Coordination | Delta + Alpha | 267 | P1 |
-| **Initiative 15**: Enterprise Security (start) | Delta | 150 | P1 |
+| **Initiative 14**: Marketing & Brand (Phase 2) | Marketing Team | 128 | P1 |
+| **Initiative 15**: Community & DevRel (Phase 1) | Marketing Team | 100 | P1 |
 | **Initiative 20**: Growth & Virality | Epsilon | 76 | P1 |
 | **Initiative 7**: Platform (remaining) | Gamma | 80 | P2 |
-| **TOTAL** | All Squads | **1,078** | - |
+| **TOTAL** | All Squads | **1,156** | - |
 
-**Note**: Initiative 10 moved from PI 2 due to dependency on Initiative 5 (AI Engine) completing in Sprint 11.
+**Notes**:
+- Initiative 10 moved from PI 2 due to dependency on Initiative 5 (AI Engine) completing in Sprint 11
+- Marketing & Community initiatives scale up in PI 3 to drive growth and user acquisition
 
 ### Sprint Breakdown
 
