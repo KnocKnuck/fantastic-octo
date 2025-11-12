@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { SessionProvider } from "@/components/providers/SessionProvider";
+import { getCurrentSession } from "@/lib/auth";
 
 export const metadata: Metadata = {
   title: "AI Calendar Agent - Plan your day without thinking",
@@ -13,14 +15,21 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Get session on the server for optimal performance
+  const session = await getCurrentSession();
+
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <SessionProvider session={session}>
+          {children}
+        </SessionProvider>
+      </body>
     </html>
   );
 }

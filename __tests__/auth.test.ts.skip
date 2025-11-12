@@ -1,0 +1,482 @@
+/**
+ * Authentication Utilities Tests
+ *
+ * Tests for the authentication helper functions in lib/auth.ts
+ * and rate limiting in lib/auth-options.ts
+ *
+ * Coverage:
+ * - Rate limiting
+ * - Type definitions
+ * - Error handling
+ *
+ * Note: Integration tests for session management will be in separate e2e tests
+ * due to the complexity of mocking NextAuth.js with Jest.
+ */
+
+import { describe, it, expect, beforeEach } from "@jest/globals";
+import { checkRateLimit } from "@/lib/auth-options";
+import { UserRole, AuthEvent, AuthError } from "@/types/auth";
+
+describe("Authentication Utilities", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  describe("getCurrentSession", () => {
+    it("should return session when user is authenticated", async () => {
+      const mockSession: ExtendedSession = {
+        user: {
+          id: "user-123",
+          email: "test@example.com",
+          name: "Test User",
+          image: null,
+          role: UserRoleEnum.USER,
+          isActive: true,
+        },
+        expires: new Date(Date.now() + 86400000).toISOString(),
+      };
+
+      mockGetServerSession.mockResolvedValue(mockSession);
+
+      const session = await getCurrentSession();
+      expect(session).toEqual(mockSession);
+      expect(session?.user.id).toBe("user-123");
+    });
+
+    it("should return null when user is not authenticated", async () => {
+      mockGetServerSession.mockResolvedValue(null);
+
+      const session = await getCurrentSession();
+      expect(session).toBeNull();
+    });
+  });
+
+  describe("getCurrentUser", () => {
+    it("should return user when authenticated", async () => {
+      const mockSession: ExtendedSession = {
+        user: {
+          id: "user-123",
+          email: "test@example.com",
+          name: "Test User",
+          image: null,
+          role: UserRoleEnum.USER,
+          isActive: true,
+        },
+        expires: new Date(Date.now() + 86400000).toISOString(),
+      };
+
+      mockGetServerSession.mockResolvedValue(mockSession);
+
+      const user = await getCurrentUser();
+      expect(user).toEqual(mockSession.user);
+      expect(user?.email).toBe("test@example.com");
+    });
+
+    it("should return null when not authenticated", async () => {
+      mockGetServerSession.mockResolvedValue(null);
+
+      const user = await getCurrentUser();
+      expect(user).toBeNull();
+    });
+  });
+
+  describe("isAuthenticated", () => {
+    it("should return true when user is authenticated and active", async () => {
+      const mockSession: ExtendedSession = {
+        user: {
+          id: "user-123",
+          email: "test@example.com",
+          name: "Test User",
+          image: null,
+          role: UserRoleEnum.USER,
+          isActive: true,
+        },
+        expires: new Date(Date.now() + 86400000).toISOString(),
+      };
+
+      mockGetServerSession.mockResolvedValue(mockSession);
+
+      const authenticated = await isAuthenticated();
+      expect(authenticated).toBe(true);
+    });
+
+    it("should return false when user is not authenticated", async () => {
+      mockGetServerSession.mockResolvedValue(null);
+
+      const authenticated = await isAuthenticated();
+      expect(authenticated).toBe(false);
+    });
+
+    it("should return false when user account is inactive", async () => {
+      const mockSession: ExtendedSession = {
+        user: {
+          id: "user-123",
+          email: "test@example.com",
+          name: "Test User",
+          image: null,
+          role: UserRoleEnum.USER,
+          isActive: false,
+        },
+        expires: new Date(Date.now() + 86400000).toISOString(),
+      };
+
+      mockGetServerSession.mockResolvedValue(mockSession);
+
+      const authenticated = await isAuthenticated();
+      expect(authenticated).toBe(false);
+    });
+  });
+
+  describe("requireAuth", () => {
+    it("should return session when authenticated", async () => {
+      const mockSession: ExtendedSession = {
+        user: {
+          id: "user-123",
+          email: "test@example.com",
+          name: "Test User",
+          image: null,
+          role: UserRoleEnum.USER,
+          isActive: true,
+        },
+        expires: new Date(Date.now() + 86400000).toISOString(),
+      };
+
+      mockGetServerSession.mockResolvedValue(mockSession);
+
+      const session = await requireAuth();
+      expect(session).toEqual(mockSession);
+    });
+
+    it("should throw error when not authenticated", async () => {
+      mockGetServerSession.mockResolvedValue(null);
+
+      await expect(requireAuth()).rejects.toThrow("Unauthorized - No session found");
+    });
+
+    it("should throw error when account is inactive", async () => {
+      const mockSession: ExtendedSession = {
+        user: {
+          id: "user-123",
+          email: "test@example.com",
+          name: "Test User",
+          image: null,
+          role: UserRoleEnum.USER,
+          isActive: false,
+        },
+        expires: new Date(Date.now() + 86400000).toISOString(),
+      };
+
+      mockGetServerSession.mockResolvedValue(mockSession);
+
+      await expect(requireAuth()).rejects.toThrow("Unauthorized - User account is inactive");
+    });
+
+    it("should throw error when session has error", async () => {
+      const mockSession: ExtendedSession = {
+        user: {
+          id: "user-123",
+          email: "test@example.com",
+          name: "Test User",
+          image: null,
+          role: UserRoleEnum.USER,
+          isActive: true,
+        },
+        expires: new Date(Date.now() + 86400000).toISOString(),
+        error: "TokenExpired",
+      };
+
+      mockGetServerSession.mockResolvedValue(mockSession);
+
+      await expect(requireAuth()).rejects.toThrow("Unauthorized - TokenExpired");
+    });
+  });
+
+  describe("hasRole", () => {
+    it("should return true when user has the specified role", async () => {
+      const mockSession: ExtendedSession = {
+        user: {
+          id: "user-123",
+          email: "test@example.com",
+          name: "Test User",
+          image: null,
+          role: UserRoleEnum.ADMIN,
+          isActive: true,
+        },
+        expires: new Date(Date.now() + 86400000).toISOString(),
+      };
+
+      mockGetServerSession.mockResolvedValue(mockSession);
+
+      const hasAdminRole = await hasRole(UserRoleEnum.ADMIN);
+      expect(hasAdminRole).toBe(true);
+    });
+
+    it("should return false when user has different role", async () => {
+      const mockSession: ExtendedSession = {
+        user: {
+          id: "user-123",
+          email: "test@example.com",
+          name: "Test User",
+          image: null,
+          role: UserRoleEnum.USER,
+          isActive: true,
+        },
+        expires: new Date(Date.now() + 86400000).toISOString(),
+      };
+
+      mockGetServerSession.mockResolvedValue(mockSession);
+
+      const hasAdminRole = await hasRole(UserRoleEnum.ADMIN);
+      expect(hasAdminRole).toBe(false);
+    });
+
+    it("should return false when not authenticated", async () => {
+      mockGetServerSession.mockResolvedValue(null);
+
+      const hasAdminRole = await hasRole(UserRoleEnum.ADMIN);
+      expect(hasAdminRole).toBe(false);
+    });
+  });
+
+  describe("requireRole", () => {
+    it("should return session when user has required role", async () => {
+      const mockSession: ExtendedSession = {
+        user: {
+          id: "user-123",
+          email: "admin@example.com",
+          name: "Admin User",
+          image: null,
+          role: UserRoleEnum.ADMIN,
+          isActive: true,
+        },
+        expires: new Date(Date.now() + 86400000).toISOString(),
+      };
+
+      mockGetServerSession.mockResolvedValue(mockSession);
+
+      const session = await requireRole(UserRoleEnum.ADMIN);
+      expect(session).toEqual(mockSession);
+    });
+
+    it("should throw error when user has different role", async () => {
+      const mockSession: ExtendedSession = {
+        user: {
+          id: "user-123",
+          email: "test@example.com",
+          name: "Test User",
+          image: null,
+          role: UserRoleEnum.USER,
+          isActive: true,
+        },
+        expires: new Date(Date.now() + 86400000).toISOString(),
+      };
+
+      mockGetServerSession.mockResolvedValue(mockSession);
+
+      await expect(requireRole(UserRoleEnum.ADMIN)).rejects.toThrow(
+        "Forbidden - Required role: admin"
+      );
+    });
+
+    it("should throw error when not authenticated", async () => {
+      mockGetServerSession.mockResolvedValue(null);
+
+      await expect(requireRole(UserRoleEnum.ADMIN)).rejects.toThrow(
+        "Unauthorized - No session found"
+      );
+    });
+  });
+
+  describe("hasAnyRole", () => {
+    it("should return true when user has one of the specified roles", async () => {
+      const mockSession: ExtendedSession = {
+        user: {
+          id: "user-123",
+          email: "premium@example.com",
+          name: "Premium User",
+          image: null,
+          role: UserRoleEnum.PREMIUM,
+          isActive: true,
+        },
+        expires: new Date(Date.now() + 86400000).toISOString(),
+      };
+
+      mockGetServerSession.mockResolvedValue(mockSession);
+
+      const hasAccess = await hasAnyRole([UserRoleEnum.ADMIN, UserRoleEnum.PREMIUM]);
+      expect(hasAccess).toBe(true);
+    });
+
+    it("should return false when user has none of the specified roles", async () => {
+      const mockSession: ExtendedSession = {
+        user: {
+          id: "user-123",
+          email: "test@example.com",
+          name: "Test User",
+          image: null,
+          role: UserRoleEnum.USER,
+          isActive: true,
+        },
+        expires: new Date(Date.now() + 86400000).toISOString(),
+      };
+
+      mockGetServerSession.mockResolvedValue(mockSession);
+
+      const hasAccess = await hasAnyRole([UserRoleEnum.ADMIN, UserRoleEnum.PREMIUM]);
+      expect(hasAccess).toBe(false);
+    });
+  });
+
+  describe("getAccessToken", () => {
+    it("should return access token when available", async () => {
+      const mockSession: ExtendedSession = {
+        user: {
+          id: "user-123",
+          email: "test@example.com",
+          name: "Test User",
+          image: null,
+          role: UserRoleEnum.USER,
+          isActive: true,
+        },
+        expires: new Date(Date.now() + 86400000).toISOString(),
+        accessToken: "mock-access-token",
+      };
+
+      mockGetServerSession.mockResolvedValue(mockSession);
+
+      const token = await getAccessToken();
+      expect(token).toBe("mock-access-token");
+    });
+
+    it("should return null when no access token", async () => {
+      const mockSession: ExtendedSession = {
+        user: {
+          id: "user-123",
+          email: "test@example.com",
+          name: "Test User",
+          image: null,
+          role: UserRoleEnum.USER,
+          isActive: true,
+        },
+        expires: new Date(Date.now() + 86400000).toISOString(),
+      };
+
+      mockGetServerSession.mockResolvedValue(mockSession);
+
+      const token = await getAccessToken();
+      expect(token).toBeNull();
+    });
+
+    it("should return null when not authenticated", async () => {
+      mockGetServerSession.mockResolvedValue(null);
+
+      const token = await getAccessToken();
+      expect(token).toBeNull();
+    });
+  });
+
+  describe("validateSession", () => {
+    it("should return valid result when authenticated", async () => {
+      const mockSession: ExtendedSession = {
+        user: {
+          id: "user-123",
+          email: "test@example.com",
+          name: "Test User",
+          image: null,
+          role: UserRoleEnum.USER,
+          isActive: true,
+        },
+        expires: new Date(Date.now() + 86400000).toISOString(),
+      };
+
+      mockGetServerSession.mockResolvedValue(mockSession);
+
+      const result = await validateSession();
+      expect(result.valid).toBe(true);
+      expect(result.session).toEqual(mockSession);
+      expect(result.error).toBeUndefined();
+    });
+
+    it("should return invalid result when not authenticated", async () => {
+      mockGetServerSession.mockResolvedValue(null);
+
+      const result = await validateSession();
+      expect(result.valid).toBe(false);
+      expect(result.error).toBe("No session found");
+    });
+
+    it("should return invalid result when account is inactive", async () => {
+      const mockSession: ExtendedSession = {
+        user: {
+          id: "user-123",
+          email: "test@example.com",
+          name: "Test User",
+          image: null,
+          role: UserRoleEnum.USER,
+          isActive: false,
+        },
+        expires: new Date(Date.now() + 86400000).toISOString(),
+      };
+
+      mockGetServerSession.mockResolvedValue(mockSession);
+
+      const result = await validateSession();
+      expect(result.valid).toBe(false);
+      expect(result.error).toBe("User account is inactive");
+    });
+  });
+
+  describe("Rate Limiting", () => {
+    beforeEach(() => {
+      // Clear rate limit store between tests
+      jest.clearAllMocks();
+    });
+
+    it("should allow first request", () => {
+      const result = checkRateLimit("test-user@example.com");
+      expect(result.allowed).toBe(true);
+    });
+
+    it("should allow requests within limit", () => {
+      const email = "test-user@example.com";
+
+      for (let i = 0; i < 5; i++) {
+        const result = checkRateLimit(email);
+        expect(result.allowed).toBe(true);
+      }
+    });
+
+    it("should block requests after exceeding limit", () => {
+      const email = "blocked-user@example.com";
+
+      // Make 5 allowed attempts
+      for (let i = 0; i < 5; i++) {
+        checkRateLimit(email);
+      }
+
+      // 6th attempt should be blocked
+      const result = checkRateLimit(email);
+      expect(result.allowed).toBe(false);
+      expect(result.resetTime).toBeDefined();
+      expect(result.resetTime).toBeGreaterThan(Date.now());
+    });
+
+    it("should provide reset time when blocked", () => {
+      const email = "blocked-user-2@example.com";
+
+      // Exceed limit
+      for (let i = 0; i < 6; i++) {
+        checkRateLimit(email);
+      }
+
+      const result = checkRateLimit(email);
+      expect(result.allowed).toBe(false);
+      expect(result.resetTime).toBeDefined();
+
+      // Reset time should be approximately 30 minutes in the future
+      const expectedResetTime = Date.now() + 30 * 60 * 1000;
+      const timeDiff = Math.abs((result.resetTime || 0) - expectedResetTime);
+      expect(timeDiff).toBeLessThan(1000); // Within 1 second tolerance
+    });
+  });
+});

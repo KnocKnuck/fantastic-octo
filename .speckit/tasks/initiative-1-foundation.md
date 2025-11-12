@@ -25,8 +25,9 @@
 
 **Story Points**: 8
 **Sprint**: Sprint 1
-**Status**: 🔵 Not Started
+**Status**: 🟡 In Progress (Day 1)
 **Priority**: P0 (CRITICAL - Required by Initiatives 3, 5, 9, 11)
+**Assignee**: DevOps Engineer
 **Dependencies**: None
 
 ---
@@ -47,8 +48,9 @@
 
 **Story Points**: 5
 **Sprint**: Sprint 1
-**Status**: 🔵 Not Started
+**Status**: 🟡 In Progress (Day 1)
 **Priority**: P0 (CRITICAL - Security requirement)
+**Assignee**: DevOps Engineer
 **Dependencies**: None
 
 ---
@@ -72,8 +74,9 @@
 
 **Story Points**: 13
 **Sprint**: Sprint 1
-**Status**: 🔵 Not Started
+**Status**: 🟡 In Progress (Day 1)
 **Priority**: P1 (Should have for good UX)
+**Assignee**: DevOps Engineer
 **Dependencies**: None
 
 ---
@@ -97,8 +100,9 @@
 
 **Story Points**: 8
 **Sprint**: Sprint 1
-**Status**: 🔵 Not Started
+**Status**: 🟡 In Progress (Day 1)
 **Priority**: P1 (Should have for performance)
+**Assignee**: DevOps Engineer
 **Dependencies**: None
 
 ---
@@ -119,8 +123,9 @@
 
 **Story Points**: 13
 **Sprint**: Sprint 1
-**Status**: 🔵 Not Started
+**Status**: 🟡 In Progress (Day 1)
 **Priority**: P0 (CRITICAL - Required by Initiatives 8, 13)
+**Assignee**: DevOps Engineer
 **Dependencies**: None
 
 ---
@@ -833,8 +838,9 @@
 
 **Story Points**: 5
 **Sprint**: Sprint 1
-**Status**: 🔵 Not Started
+**Status**: 🟡 In Progress (Day 1)
 **Priority**: P0
+**Assignee**: QA Lead
 
 ---
 
@@ -852,8 +858,9 @@
 
 **Story Points**: 8
 **Sprint**: Sprint 1
-**Status**: 🔵 Not Started
+**Status**: 🟡 In Progress (Day 1)
 **Priority**: P1
+**Assignee**: QA Lead
 
 ---
 

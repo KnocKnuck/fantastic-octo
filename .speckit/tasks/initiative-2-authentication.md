@@ -24,9 +24,9 @@
 
 **Story Points**: 3
 **Sprint**: Sprint 1
-**Status**: 🔵 Not Started
+**Status**: 🟡 In Progress (Day 1)
 **Priority**: P0
-**Assignee**: Full Stack Developer
+**Assignee**: Squad Alpha
 
 ---
 
@@ -47,9 +47,9 @@
 
 **Story Points**: 5
 **Sprint**: Sprint 1
-**Status**: 🔵 Not Started
+**Status**: 🟡 In Progress (Day 1)
 **Priority**: P0
-**Assignee**: Full Stack Developer
+**Assignee**: Squad Alpha
 **Dependencies**: Story 2.1.1
 
 ---
@@ -69,9 +69,9 @@
 
 **Story Points**: 5
 **Sprint**: Sprint 1
-**Status**: 🔵 Not Started
+**Status**: 🟡 In Progress (Day 1)
 **Priority**: P0
-**Assignee**: Full Stack Developer
+**Assignee**: Squad Alpha
 **Dependencies**: Story 2.1.2
 
 ---

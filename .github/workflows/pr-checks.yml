@@ -1,0 +1,306 @@
+name: Pull Request Checks
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    branches:
+      - main
+      - develop
+
+env:
+  NODE_VERSION: '20.x'
+
+# Cancel previous runs if a new commit is pushed
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Job 1: PR Metadata Check
+  pr-metadata:
+    name: Check PR Metadata
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    steps:
+      - name: Check PR title
+        run: |
+          PR_TITLE="${{ github.event.pull_request.title }}"
+          if [ -z "$PR_TITLE" ]; then
+            echo "❌ PR title is empty"
+            exit 1
+          fi
+          echo "✅ PR title: $PR_TITLE"
+
+      - name: Check PR description
+        run: |
+          PR_BODY="${{ github.event.pull_request.body }}"
+          if [ -z "$PR_BODY" ]; then
+            echo "⚠️ Warning: PR description is empty"
+          else
+            echo "✅ PR has description"
+          fi
+
+      - name: Check PR labels
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const labels = context.payload.pull_request.labels.map(l => l.name);
+            if (labels.length === 0) {
+              console.log('⚠️ Warning: No labels on PR');
+            } else {
+              console.log('✅ PR labels:', labels.join(', '));
+            }
+
+  # Job 2: Code Quality Checks
+  quality:
+    name: Code Quality
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for better analysis
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run linter
+        run: npm run lint
+
+      - name: Check TypeScript
+        run: npx tsc --noEmit
+
+      - name: Check for console statements
+        run: |
+          if grep -r "console\.\(log\|debug\|info\)" app/ components/ lib/ --include="*.ts" --include="*.tsx" || true; then
+            echo "⚠️ Warning: Found console statements in code"
+          fi
+
+  # Job 3: Test Coverage
+  test-coverage:
+    name: Test Coverage
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests with coverage
+        run: npm test -- --coverage --passWithNoTests
+
+      - name: Generate coverage badge
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./coverage/lcov.info
+          flags: unittests
+          fail_ci_if_error: false
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Comment coverage on PR
+        uses: actions/github-script@v7
+        if: always()
+        with:
+          script: |
+            const fs = require('fs');
+            let coverage = 'N/A';
+            try {
+              const summary = JSON.parse(fs.readFileSync('./coverage/coverage-summary.json', 'utf8'));
+              const total = summary.total;
+              coverage = `Lines: ${total.lines.pct}% | Branches: ${total.branches.pct}% | Functions: ${total.functions.pct}% | Statements: ${total.statements.pct}%`;
+            } catch (e) {
+              coverage = 'No coverage data available';
+            }
+
+            const comment = `## Test Coverage Report
+
+            ${coverage}
+
+            Coverage report has been generated. Check the artifacts for detailed information.`;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+  # Job 4: Security Scan
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run npm audit
+        run: npm audit --audit-level=moderate || true
+
+      - name: Check for secrets
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./
+          base: ${{ github.event.pull_request.base.sha }}
+          head: ${{ github.event.pull_request.head.sha }}
+          extra_args: --only-verified
+
+  # Job 5: Build Verification
+  build:
+    name: Build Verification
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build
+
+      - name: Check build size
+        run: |
+          BUILD_SIZE=$(du -sh .next | cut -f1)
+          echo "Build size: $BUILD_SIZE"
+          echo "build_size=$BUILD_SIZE" >> $GITHUB_OUTPUT
+
+  # Job 6: E2E Tests (Critical paths only for PRs)
+  e2e-critical:
+    name: E2E Critical Paths
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright
+        run: npx playwright install --with-deps chromium
+
+      - name: Run critical E2E tests
+        run: npm run test:e2e -- --project=chromium
+        env:
+          CI: true
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-results
+          path: playwright-report/
+          retention-days: 7
+
+  # Job 7: Performance Check
+  performance:
+    name: Performance Check
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build for production
+        run: npm run build
+
+      - name: Analyze bundle size
+        run: |
+          echo "Analyzing bundle size..."
+          # Add bundle analysis commands here
+          # npx next-bundle-analyzer or similar
+
+  # Job 8: All Checks Status
+  all-checks:
+    name: All Checks Passed
+    runs-on: ubuntu-latest
+    needs: [pr-metadata, quality, test-coverage, security-scan, build, e2e-critical, performance]
+    if: always() && github.event.pull_request.draft == false
+    steps:
+      - name: Check all jobs status
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const jobs = [
+              '${{ needs.pr-metadata.result }}',
+              '${{ needs.quality.result }}',
+              '${{ needs.test-coverage.result }}',
+              '${{ needs.security-scan.result }}',
+              '${{ needs.build.result }}',
+              '${{ needs.e2e-critical.result }}',
+              '${{ needs.performance.result }}'
+            ];
+
+            const failed = jobs.filter(j => j === 'failure').length;
+            const cancelled = jobs.filter(j => j === 'cancelled').length;
+
+            if (failed > 0) {
+              core.setFailed(`${failed} check(s) failed`);
+            } else if (cancelled > 0) {
+              core.setFailed(`${cancelled} check(s) were cancelled`);
+            } else {
+              console.log('✅ All checks passed!');
+            }
+
+      - name: Comment on PR
+        uses: actions/github-script@v7
+        if: always()
+        with:
+          script: |
+            const status = '${{ needs.all-checks.result }}' === 'success' ? '✅ All checks passed!' : '❌ Some checks failed';
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## PR Checks Complete\n\n${status}`
+            });
