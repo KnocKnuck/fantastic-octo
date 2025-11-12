@@ -151,28 +151,28 @@ Create test files next to the source code with `.test.ts` or `.test.tsx` extensi
 
 ```typescript
 // lib/utils.test.ts
-import { formatDate, calculateDuration } from './utils'
+import { formatDate, calculateDuration } from "./utils";
 
-describe('Date Utils', () => {
-  describe('formatDate', () => {
-    it('should format date correctly', () => {
-      const date = new Date('2024-01-15')
-      expect(formatDate(date)).toBe('January 15, 2024')
-    })
+describe("Date Utils", () => {
+  describe("formatDate", () => {
+    it("should format date correctly", () => {
+      const date = new Date("2024-01-15");
+      expect(formatDate(date)).toBe("January 15, 2024");
+    });
 
-    it('should handle invalid dates', () => {
-      expect(formatDate(null)).toBe('Invalid Date')
-    })
-  })
+    it("should handle invalid dates", () => {
+      expect(formatDate(null)).toBe("Invalid Date");
+    });
+  });
 
-  describe('calculateDuration', () => {
-    it('should calculate duration between dates', () => {
-      const start = new Date('2024-01-15T10:00:00')
-      const end = new Date('2024-01-15T11:30:00')
-      expect(calculateDuration(start, end)).toBe(90) // minutes
-    })
-  })
-})
+  describe("calculateDuration", () => {
+    it("should calculate duration between dates", () => {
+      const start = new Date("2024-01-15T10:00:00");
+      const end = new Date("2024-01-15T11:30:00");
+      expect(calculateDuration(start, end)).toBe(90); // minutes
+    });
+  });
+});
 ```
 
 ### Component Tests
@@ -235,43 +235,43 @@ describe('TaskList Component', () => {
 
 ```typescript
 // app/api/tasks/route.test.ts
-import { GET, POST } from './route'
-import { NextRequest } from 'next/server'
+import { GET, POST } from "./route";
+import { NextRequest } from "next/server";
 
-describe('Tasks API', () => {
-  describe('GET /api/tasks', () => {
-    it('should return list of tasks', async () => {
-      const request = new NextRequest('http://localhost:3000/api/tasks')
-      const response = await GET(request)
-      const data = await response.json()
+describe("Tasks API", () => {
+  describe("GET /api/tasks", () => {
+    it("should return list of tasks", async () => {
+      const request = new NextRequest("http://localhost:3000/api/tasks");
+      const response = await GET(request);
+      const data = await response.json();
 
-      expect(response.status).toBe(200)
-      expect(data.success).toBe(true)
-      expect(Array.isArray(data.data)).toBe(true)
-    })
-  })
+      expect(response.status).toBe(200);
+      expect(data.success).toBe(true);
+      expect(Array.isArray(data.data)).toBe(true);
+    });
+  });
 
-  describe('POST /api/tasks', () => {
-    it('should create a new task', async () => {
+  describe("POST /api/tasks", () => {
+    it("should create a new task", async () => {
       const taskData = {
-        title: 'New Task',
-        description: 'Task description',
-      }
+        title: "New Task",
+        description: "Task description",
+      };
 
-      const request = new NextRequest('http://localhost:3000/api/tasks', {
-        method: 'POST',
+      const request = new NextRequest("http://localhost:3000/api/tasks", {
+        method: "POST",
         body: JSON.stringify(taskData),
-      })
+      });
 
-      const response = await POST(request)
-      const data = await response.json()
+      const response = await POST(request);
+      const data = await response.json();
 
-      expect(response.status).toBe(201)
-      expect(data.success).toBe(true)
-      expect(data.data.title).toBe('New Task')
-    })
-  })
-})
+      expect(response.status).toBe(201);
+      expect(data.success).toBe(true);
+      expect(data.data.title).toBe("New Task");
+    });
+  });
+});
 ```
 
 ### E2E Tests
@@ -282,48 +282,48 @@ E2E tests are located in the `e2e/` directory.
 
 ```typescript
 // e2e/task-management.spec.ts
-import { test, expect } from '@playwright/test'
+import { test, expect } from "@playwright/test";
 
-test.describe('Task Management', () => {
+test.describe("Task Management", () => {
   test.beforeEach(async ({ page }) => {
     // Sign in before each test
-    await page.goto('/signin')
-    await page.fill('[name="email"]', 'test@example.com')
-    await page.fill('[name="password"]', 'password123')
-    await page.click('button[type="submit"]')
-    await page.waitForURL('/dashboard')
-  })
+    await page.goto("/signin");
+    await page.fill('[name="email"]', "test@example.com");
+    await page.fill('[name="password"]', "password123");
+    await page.click('button[type="submit"]');
+    await page.waitForURL("/dashboard");
+  });
 
-  test('should create a new task', async ({ page }) => {
+  test("should create a new task", async ({ page }) => {
     // Navigate to tasks
-    await page.click('text=Tasks')
+    await page.click("text=Tasks");
 
     // Click create task button
-    await page.click('button:has-text("New Task")')
+    await page.click('button:has-text("New Task")');
 
     // Fill in task details
-    await page.fill('[name="title"]', 'My Test Task')
-    await page.fill('[name="description"]', 'Task description')
-    await page.selectOption('[name="priority"]', 'high')
+    await page.fill('[name="title"]', "My Test Task");
+    await page.fill('[name="description"]', "Task description");
+    await page.selectOption('[name="priority"]', "high");
 
     // Submit form
-    await page.click('button[type="submit"]')
+    await page.click('button[type="submit"]');
 
     // Verify task was created
-    await expect(page.locator('text=My Test Task')).toBeVisible()
-  })
+    await expect(page.locator("text=My Test Task")).toBeVisible();
+  });
 
-  test('should complete a task', async ({ page }) => {
-    await page.goto('/tasks')
+  test("should complete a task", async ({ page }) => {
+    await page.goto("/tasks");
 
     // Find a task and mark as complete
-    const task = page.locator('.task-item').first()
-    await task.locator('input[type="checkbox"]').check()
+    const task = page.locator(".task-item").first();
+    await task.locator('input[type="checkbox"]').check();
 
     // Verify task is marked as completed
-    await expect(task).toHaveClass(/completed/)
-  })
-})
+    await expect(task).toHaveClass(/completed/);
+  });
+});
 ```
 
 ## Test Coverage
@@ -406,6 +406,7 @@ Commits must follow Conventional Commits format:
 ```
 
 **Types**:
+
 - `feat`: New feature
 - `fix`: Bug fix
 - `docs`: Documentation changes
@@ -419,6 +420,7 @@ Commits must follow Conventional Commits format:
 - `revert`: Revert previous commit
 
 **Examples**:
+
 ```bash
 git commit -m "feat: add task filtering"
 git commit -m "fix(api): resolve CORS issue"
@@ -497,6 +499,152 @@ git commit -m "test: add unit tests for auth service"
    - Clean up after tests
    - Use test-specific accounts
 
+#### Mocking OAuth Providers
+
+When testing authentication flows with OAuth providers (Google, Microsoft, etc.), use request interception to mock the OAuth flow:
+
+```typescript
+import { test, expect, Page } from "@playwright/test";
+
+// Mock NextAuth session
+async function mockAuthSession(page: Page) {
+  const sessionToken = "mock-session-token-" + Date.now();
+
+  // Set session cookie
+  await page.context().addCookies([
+    {
+      name: "next-auth.session-token",
+      value: sessionToken,
+      domain: "localhost",
+      path: "/",
+      httpOnly: true,
+      sameSite: "Lax",
+      expires: Date.now() / 1000 + 30 * 24 * 60 * 60, // 30 days
+    },
+  ]);
+
+  // Mock session API endpoint
+  await page.route("**/api/auth/session", async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        user: {
+          id: "test-user-123",
+          email: "test@example.com",
+          name: "Test User",
+        },
+        expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+      }),
+    });
+  });
+}
+
+// Mock OAuth callback
+async function mockOAuthCallback(page: Page) {
+  await page.route("**/api/auth/signin/google", async (route) => {
+    await route.fulfill({
+      status: 302,
+      headers: {
+        Location: `/api/auth/callback/google?code=mock-auth-code`,
+      },
+    });
+  });
+
+  await page.route("**/api/auth/callback/google*", async (route) => {
+    await mockAuthSession(page);
+    await route.fulfill({
+      status: 302,
+      headers: {
+        Location: "/dashboard",
+      },
+    });
+  });
+}
+
+test("should complete OAuth flow", async ({ page }) => {
+  await mockOAuthCallback(page);
+  await page.goto("/signin");
+
+  await page.getByRole("button", { name: /continue with google/i }).click();
+
+  await expect(page).toHaveURL("/dashboard");
+});
+```
+
+**Benefits of Mocking OAuth**:
+
+- Tests run without real OAuth credentials
+- Faster test execution
+- Deterministic behavior
+- No rate limiting from OAuth providers
+- Works in CI/CD environments
+
+#### Testing Protected Routes
+
+Test that authentication middleware properly protects routes:
+
+```typescript
+test.describe("Protected Routes", () => {
+  test("should redirect unauthenticated users", async ({ page }) => {
+    // Clear any existing session
+    await page.context().clearCookies();
+
+    // Try to access protected route
+    await page.goto("/dashboard");
+
+    // Should redirect to sign-in with callback URL
+    await expect(page).toHaveURL(/\/signin/);
+    expect(page.url()).toContain("callbackUrl");
+  });
+
+  test("should allow authenticated users", async ({ page }) => {
+    await mockAuthSession(page);
+
+    await page.goto("/dashboard");
+
+    // Should not redirect to sign-in
+    await expect(page).toHaveURL("/dashboard");
+  });
+
+  test("should persist session across reloads", async ({ page }) => {
+    await mockAuthSession(page);
+    await page.goto("/dashboard");
+
+    await page.reload();
+
+    // Should still have access
+    await expect(page).not.toHaveURL(/\/signin/);
+  });
+
+  test("should handle expired sessions", async ({ page }) => {
+    // Set expired session
+    await page.context().addCookies([
+      {
+        name: "next-auth.session-token",
+        value: "expired",
+        domain: "localhost",
+        path: "/",
+        expires: Date.now() / 1000 - 3600, // Expired
+      },
+    ]);
+
+    await page.goto("/dashboard");
+
+    // Should redirect to sign-in
+    await expect(page).toHaveURL(/\/signin/);
+  });
+});
+```
+
+**Key Testing Patterns**:
+
+- Test both authenticated and unauthenticated states
+- Verify session persistence across page reloads
+- Test session expiration handling
+- Verify callback URL preservation
+- Test protected API routes
+
 ### Performance
 
 1. **Fast Feedback**:
@@ -552,6 +700,36 @@ git commit -m "test: add unit tests for auth service"
   - Add tests for uncovered branches
   - Review if thresholds are realistic
   - Exclude non-critical files if necessary
+
+#### E2E Tests Not Finding Elements
+
+- **Cause**: Timing issues, incorrect selectors, or elements not rendered
+- **Solution**:
+  - Use `waitForSelector()` before interacting with elements
+  - Prefer accessible selectors: `getByRole()`, `getByLabel()`, `getByText()`
+  - Check that the element is visible: `await expect(element).toBeVisible()`
+  - Use Playwright Inspector to debug: `npm run test:e2e:debug`
+  - Verify the element exists in the DOM with `page.locator().count()`
+
+#### OAuth Mocking Not Working
+
+- **Cause**: Routes not intercepted correctly or timing issues
+- **Solution**:
+  - Set up route mocking before navigating to the page
+  - Use `page.route()` to intercept requests before they're made
+  - Verify the route pattern matches: use `**/api/auth/**` for all auth routes
+  - Check browser console for errors: `page.on('console', msg => console.log(msg))`
+  - Ensure session cookies have correct domain (localhost for local testing)
+
+#### Dev Server Not Starting for E2E Tests
+
+- **Cause**: Port already in use or build errors
+- **Solution**:
+  - Check if port 3000 is already in use: `lsof -i :3000`
+  - Kill existing process: `kill -9 <PID>`
+  - Increase webServer timeout in `playwright.config.ts`
+  - Check for build errors: `npm run build`
+  - Set `reuseExistingServer: true` to use running dev server
 
 ### Getting Help
 
@@ -629,12 +807,16 @@ npm run test:e2e:headed    # See browser during tests
 project/
 ├── __tests__/              # Test utilities and setup
 │   ├── setup.ts           # Global test setup
+│   ├── auth.test.ts       # Unit tests for auth
+│   ├── e2e/               # E2E tests (comprehensive)
+│   │   ├── auth.spec.ts   # Auth flow E2E tests
+│   │   └── profile.spec.ts # Profile E2E tests
 │   └── utils/             # Test helpers
 │       ├── test-utils.tsx # React Testing Library helpers
 │       └── mock-data.ts   # Mock data generators
-├── e2e/                   # E2E tests
-│   ├── auth.spec.ts
-│   └── landing-page.spec.ts
+├── e2e/                   # Legacy E2E tests
+│   ├── auth.spec.ts       # Basic auth tests
+│   └── landing-page.spec.ts # Landing page tests
 ├── app/                   # Next.js app directory
 │   └── **/*.test.tsx      # Component tests
 ├── lib/                   # Utilities
@@ -644,6 +826,8 @@ project/
 ├── playwright.config.ts   # Playwright configuration
 └── TESTING.md            # This file
 ```
+
+**Note**: The Playwright config is set to look for tests in both `__tests__/e2e/` and `e2e/` directories. New E2E tests should be placed in `__tests__/e2e/` for better organization.
 
 ---
 

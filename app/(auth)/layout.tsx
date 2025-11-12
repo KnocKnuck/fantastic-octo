@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import "../globals.css";
 
 export const metadata: Metadata = {
@@ -30,26 +31,24 @@ export default function AuthLayout({
           {/* Header */}
           <header className="w-full py-6 px-4 sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto flex items-center justify-between">
-              <a href="/" className="flex items-center space-x-2">
+              <Link href="/" className="flex items-center space-x-2">
                 <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg" />
                 <span className="text-xl font-bold text-gray-900">
                   AI Calendar Agent
                 </span>
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/"
                 className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
               >
                 Back to Home
-              </a>
+              </Link>
             </div>
           </header>
 
           {/* Main Content */}
           <main className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12">
-            <div className="w-full max-w-md">
-              {children}
-            </div>
+            <div className="w-full max-w-md">{children}</div>
           </main>
 
           {/* Footer */}

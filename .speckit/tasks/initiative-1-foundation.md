@@ -10,11 +10,13 @@
 **Description**: Core infrastructure services required by all other initiatives
 
 ### Story 1.0.1: Background Job System
+
 **As a** system
 **I want** a background job queue
 **So that** long-running tasks don't block API requests
 
 **Acceptance Criteria**:
+
 - [ ] Inngest installed and configured
 - [ ] Event system for background jobs
 - [ ] Job queues for: calendar sync, email notifications, AI scheduling
@@ -33,34 +35,39 @@
 ---
 
 ### Story 1.0.2: Rate Limiting & API Security
+
 **As a** system
 **I want** rate limiting on all API endpoints
 **So that** the service is protected from abuse
 
 **Acceptance Criteria**:
-- [ ] Rate limiting middleware using Upstash Redis
-- [ ] Limits: 100 req/min per IP (public), 1000 req/min (authenticated)
-- [ ] Custom limits for sensitive endpoints (auth: 5/min)
-- [ ] Rate limit headers (X-RateLimit-*)
-- [ ] 429 Too Many Requests responses
-- [ ] IP allowlist for internal services
-- [ ] Redis fallback if unavailable (allow through with logging)
+
+- [x] Rate limiting middleware using Upstash Redis
+- [x] Limits: 100 req/min per IP (public), 1000 req/min (authenticated)
+- [x] Custom limits for sensitive endpoints (auth: 5/min)
+- [x] Rate limit headers (X-RateLimit-\*)
+- [x] 429 Too Many Requests responses
+- [x] IP allowlist for internal services
+- [x] Redis fallback if unavailable (allow through with logging)
 
 **Story Points**: 5
 **Sprint**: Sprint 1
-**Status**: 🟡 In Progress (Day 1)
+**Status**: ✅ Done (Day 2 - Nov 13)
 **Priority**: P0 (CRITICAL - Security requirement)
-**Assignee**: DevOps Engineer
+**Assignee**: Tech Lead
 **Dependencies**: None
+**Completed By**: Tech Lead - Created comprehensive rate limiting middleware with presets
 
 ---
 
 ### Story 1.0.3: Real-Time Infrastructure (WebSocket)
+
 **As a** system
 **I want** real-time communication infrastructure
 **So that** users see updates without refreshing
 
 **Acceptance Criteria**:
+
 - [ ] Pusher or Ably integrated
 - [ ] WebSocket channels for:
   - Calendar sync status
@@ -73,20 +80,23 @@
 - [ ] Client SDK wrapper for easy usage
 
 **Story Points**: 13
-**Sprint**: Sprint 1
-**Status**: 🟡 In Progress (Day 1)
+**Sprint**: Sprint 2 (Moved from Sprint 1)
+**Status**: 🔵 Not Started
 **Priority**: P1 (Should have for good UX)
 **Assignee**: DevOps Engineer
 **Dependencies**: None
+**Notes**: Moved to Sprint 2 to resolve Squad Gamma over-allocation (Day 2)
 
 ---
 
 ### Story 1.0.4: Caching Layer
+
 **As a** system
 **I want** caching for expensive queries
 **So that** API response times are fast
 
 **Acceptance Criteria**:
+
 - [ ] Redis caching via Upstash
 - [ ] Cache strategy for:
   - User preferences (5 min TTL)
@@ -108,11 +118,13 @@
 ---
 
 ### Story 1.0.5: Workspace & Multi-Tenancy Model
+
 **As a** system
 **I want** proper workspace isolation
 **So that** team features are properly scoped
 
 **Acceptance Criteria**:
+
 - [ ] Workspace model added to Prisma schema
 - [ ] Every user belongs to a workspace (personal or team)
 - [ ] All data models include workspaceId
@@ -135,11 +147,13 @@
 **Description**: Public-facing website to present product value proposition and capture beta signups
 
 ### Story 1.1.1: Hero Section with Value Proposition ✅
+
 **As a** potential user visiting the site
 **I want to** immediately understand what AI Calendar Agent does
 **So that** I can decide if it's relevant to my needs
 
 **Acceptance Criteria**:
+
 - [x] Clear headline: "Plan your day without thinking"
 - [x] Subheadline explains core benefit
 - [x] Two CTA buttons: "Try for free" and "Join the private beta"
@@ -154,11 +168,13 @@
 ---
 
 ### Story 1.1.2: How It Works Section ✅
+
 **As a** visitor
 **I want to** understand the 3-step process
 **So that** I know how simple it is to use
 
 **Acceptance Criteria**:
+
 - [x] 3 cards with icons and descriptions
 - [x] Step 1: Add your tasks
 - [x] Step 2: Connect your calendar
@@ -173,11 +189,13 @@
 ---
 
 ### Story 1.1.3: Value Proposition Cards ✅
+
 **As a** visitor
 **I want to** see concrete benefits
 **So that** I understand the time savings
 
 **Acceptance Criteria**:
+
 - [x] "+6h saved per week" card
 - [x] "Zero mental load" card
 - [x] "Clear view of your week" card
@@ -191,11 +209,13 @@
 ---
 
 ### Story 1.1.4: Feature Highlights Grid ✅
+
 **As a** visitor
 **I want to** see key product features
 **So that** I know what capabilities exist
 
 **Acceptance Criteria**:
+
 - [x] 4 feature cards in grid
 - [x] Dynamic rescheduling
 - [x] Smart time estimation
@@ -210,11 +230,13 @@
 ---
 
 ### Story 1.1.5: Social Proof Testimonial ✅
+
 **As a** visitor
 **I want to** see evidence that others find value
 **So that** I trust the product works
 
 **Acceptance Criteria**:
+
 - [x] Centered testimonial card
 - [x] 5-star rating
 - [x] Quote from beta user
@@ -228,11 +250,13 @@
 ---
 
 ### Story 1.1.6: Beta Signup CTA Section ✅
+
 **As a** interested visitor
 **I want to** sign up for the beta
 **So that** I can be notified when product launches
 
 **Acceptance Criteria**:
+
 - [x] Email input field
 - [x] "Join the Beta" button
 - [x] Progress bar showing 67/100 spots filled
@@ -251,11 +275,13 @@
 **Description**: Optimize landing page for search engine visibility and organic traffic
 
 ### Story 1.2.1: On-Page SEO Optimization ✅
+
 **As a** potential user searching for calendar automation
 **I want** the site to appear in search results
 **So that** I can discover the product
 
 **Acceptance Criteria**:
+
 - [x] SEO title: "AI Calendar Agent - Plan your day without thinking"
 - [x] Meta description with keywords
 - [x] Open Graph tags for social sharing
@@ -270,11 +296,13 @@
 ---
 
 ### Story 1.2.2: Performance Optimization
+
 **As a** visitor on any device
 **I want** the page to load quickly
 **So that** I don't bounce
 
 **Acceptance Criteria**:
+
 - [ ] Lighthouse score > 90
 - [ ] Images optimized (Next.js Image)
 - [ ] Code splitting implemented
@@ -290,11 +318,13 @@
 ---
 
 ### Story 1.2.3: Analytics & Tracking Setup
+
 **As a** product owner
 **I want** to track visitor behavior
 **So that** I can optimize conversion
 
 **Acceptance Criteria**:
+
 - [ ] Vercel Analytics installed
 - [ ] Track button clicks (CTAs)
 - [ ] Track email signups
@@ -314,11 +344,13 @@
 **Description**: Comprehensive content marketing strategy to drive organic traffic, establish authority, and build audience
 
 ### Story 1.3.1: Blog Infrastructure & First Posts
+
 **As a** potential user searching for productivity tips
 **I want** to find helpful content
 **So that** I discover the product organically
 
 **Acceptance Criteria**:
+
 - [ ] Set up blog at `/blog` with Next.js MDX
 - [ ] RSS feed implementation
 - [ ] Author profiles system
@@ -343,11 +375,13 @@
 ---
 
 ### Story 1.3.2: Comprehensive SEO Strategy
+
 **As a** marketing lead
 **I want** a data-driven SEO strategy
 **So that** we rank for high-intent keywords
 
 **Acceptance Criteria**:
+
 - [ ] Keyword research (50+ target keywords) using Ahrefs/SEMrush:
   - **High-intent commercial** (10): "ai calendar app", "automatic scheduling tool", "calendar automation software"
   - **Problem-aware** (15): "how to organize my schedule", "calendar management tips", "time blocking app"
@@ -370,11 +404,13 @@
 ---
 
 ### Story 1.3.3: 24-Month Content Calendar
+
 **As a** content marketing manager
 **I want** a comprehensive content calendar
 **So that** we publish consistently and cover all topics
 
 **Acceptance Criteria**:
+
 - [ ] Content calendar with 200+ article ideas (2-3 posts/week for 24 months)
 - [ ] Content pillars defined:
   - **Productivity & Time Management** (30%): Time blocking, deep work, Pomodoro
@@ -401,11 +437,13 @@
 ---
 
 ### Story 1.3.4: Content Production System
+
 **As a** content team
 **I want** efficient content production workflows
 **So that** we maintain quality and consistency
 
 **Acceptance Criteria**:
+
 - [ ] Content brief template (target keyword, search intent, outline, word count, CTA)
 - [ ] Writer guidelines document (tone, style, formatting, SEO best practices)
 - [ ] Content review checklist (accuracy, SEO, readability, CTAs)
@@ -426,11 +464,13 @@
 ---
 
 ### Story 1.3.5: Link Building Strategy
+
 **As a** SEO manager
 **I want** high-quality backlinks
 **So that** we increase domain authority and rankings
 
 **Acceptance Criteria**:
+
 - [ ] Guest post target list (50+ sites):
   - Productivity blogs (Lifehacker, FastCompany, Entrepreneur)
   - Tech publications (TechCrunch, VentureBeat, Product Hunt Blog)
@@ -457,11 +497,13 @@
 ---
 
 ### Story 1.3.6: Content Distribution Strategy
+
 **As a** growth marketer
 **I want** multi-channel content distribution
 **So that** our content reaches maximum audience
 
 **Acceptance Criteria**:
+
 - [ ] Social media distribution plan:
   - Twitter: Key insights + link (daily)
   - LinkedIn: Professional tips + link (3x/week)
@@ -491,11 +533,13 @@
 ---
 
 ### Story 1.3.7: Pillar Content & Resource Hubs
+
 **As a** potential user
 **I want** comprehensive guides
 **So that** I can learn everything about a topic
 
 **Acceptance Criteria**:
+
 - [ ] Create 5 pillar pages (3000-5000 words each):
   - "The Complete Guide to AI-Powered Calendar Management"
   - "Time Blocking: The Ultimate Guide for Productivity"
@@ -518,11 +562,13 @@
 ---
 
 ### Story 1.3.8: Email Marketing - Onboarding Sequence
+
 **As a** new subscriber
 **I want** valuable emails
 **So that** I learn about the product and get started
 
 **Acceptance Criteria**:
+
 - [ ] Onboarding email sequence (7 emails over 14 days):
   - **Day 0**: Welcome + Account setup instructions
   - **Day 1**: "How to Connect Your First Calendar" (tutorial)
@@ -547,11 +593,13 @@
 ---
 
 ### Story 1.3.9: Email Marketing - Engagement & Retention
+
 **As a** active user
 **I want** helpful content in my inbox
 **So that** I stay engaged and get more value
 
 **Acceptance Criteria**:
+
 - [ ] Weekly newsletter "Productivity Pulse":
   - 1 new blog post
   - 1 productivity tip
@@ -582,11 +630,13 @@
 ---
 
 ### Story 1.3.10: Email Marketing - Winback & Reactivation
+
 **As a** churned or inactive user
 **I want** reasons to come back
 **So that** I can re-engage with the product
 
 **Acceptance Criteria**:
+
 - [ ] Inactivity detection:
   - No login for 7 days → Send gentle reminder
   - No login for 14 days → Send "We miss you" with benefit reminder
@@ -616,11 +666,13 @@
 ---
 
 ### Story 1.3.11: Video Content Strategy
+
 **As a** visual learner
 **I want** video tutorials
 **So that** I can learn faster
 
 **Acceptance Criteria**:
+
 - [ ] YouTube channel setup (branding, descriptions, playlists)
 - [ ] Video content plan (24 videos in Year 1):
   - **Product tutorials** (10): Getting started, features, integrations
@@ -652,11 +704,13 @@
 ---
 
 ### Story 1.3.12: Podcast Strategy
+
 **As a** podcast listener
 **I want** to learn from experts
 **So that** I discover the product while getting value
 
 **Acceptance Criteria**:
+
 - [ ] Podcast research:
   - Identify 50+ podcasts (productivity, tech, entrepreneurship)
   - Prioritize by audience size and relevance
@@ -686,11 +740,13 @@
 ---
 
 ### Story 1.3.13: Case Studies & Customer Stories
+
 **As a** potential customer
 **I want** to see real results
 **So that** I trust the product works
 
 **Acceptance Criteria**:
+
 - [ ] Case study template:
   - Customer background (role, company, challenges)
   - Solution (how they use the product)
@@ -724,11 +780,13 @@
 ---
 
 ### Story 1.3.14: Content Performance Analytics
+
 **As a** content marketing manager
 **I want** to track content performance
 **So that** I can optimize our strategy
 
 **Acceptance Criteria**:
+
 - [ ] Analytics dashboard setup:
   - Google Analytics 4 (traffic, engagement, conversions)
   - Google Search Console (rankings, clicks, impressions)
@@ -766,11 +824,13 @@
 **Description**: Set up project for efficient development
 
 ### Story 1.4.1: AI Agents Setup ✅
+
 **As a** developer
 **I want** specialized AI agents
 **So that** development is more efficient
 
 **Acceptance Criteria**:
+
 - [x] UX/UI Agent configured
 - [x] Full Stack Developer Agent configured
 - [x] Project Manager Agent configured
@@ -783,11 +843,13 @@
 ---
 
 ### Story 1.4.2: Spec-Kit Integration ✅
+
 **As a** team
 **I want** clear specifications
 **So that** we build the right thing
 
 **Acceptance Criteria**:
+
 - [x] Constitution file created
 - [x] Project specification (specify) created
 - [x] Technical plan (plan) created
@@ -801,11 +863,13 @@
 ---
 
 ### Story 1.4.3: Development Environment Setup ✅
+
 **As a** developer
 **I want** a fully configured dev environment
 **So that** I can start coding immediately
 
 **Acceptance Criteria**:
+
 - [x] Next.js 14 with TypeScript
 - [x] TailwindCSS configured
 - [x] Shadcn UI components installed
@@ -824,11 +888,13 @@
 **Description**: Automated testing and deployment
 
 ### Story 1.5.1: GitHub Actions Setup
+
 **As a** developer
 **I want** automated CI/CD
 **So that** deployments are safe and fast
 
 **Acceptance Criteria**:
+
 - [ ] Lint and type-check on PR
 - [ ] Run tests on PR
 - [ ] Build check on PR
@@ -845,11 +911,13 @@
 ---
 
 ### Story 1.5.2: Testing Infrastructure
+
 **As a** developer
 **I want** comprehensive testing
 **So that** we catch bugs early
 
 **Acceptance Criteria**:
+
 - [ ] Jest configured for unit tests
 - [ ] React Testing Library for component tests
 - [ ] Playwright for E2E tests
@@ -869,11 +937,13 @@
 **Description**: Production monitoring and error handling
 
 ### Story 1.6.1: Sentry Integration
+
 **As a** developer
 **I want** to be notified of errors
 **So that** I can fix issues quickly
 
 **Acceptance Criteria**:
+
 - [ ] Sentry installed and configured
 - [ ] Client-side error tracking
 - [ ] Server-side error tracking

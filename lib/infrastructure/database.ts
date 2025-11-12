@@ -12,24 +12,24 @@
  * @see https://www.prisma.io/docs/guides/performance-and-optimization/connection-management
  */
 
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from "@prisma/client";
 
 declare global {
-  // eslint-disable-next-line no-var
   var prisma: PrismaClient | undefined;
 }
 
 // Prisma Client Options
 const prismaOptions = {
-  log: process.env.NODE_ENV === 'development'
-    ? ['query', 'error', 'warn'] as const
-    : ['error'] as const,
+  log:
+    process.env.NODE_ENV === "development"
+      ? (["query", "error", "warn"] as const)
+      : (["error"] as const),
 };
 
 // Singleton pattern for Prisma Client
 export const prisma = global.prisma || new PrismaClient(prismaOptions);
 
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== "production") {
   global.prisma = prisma;
 }
 
@@ -40,10 +40,10 @@ if (process.env.NODE_ENV !== 'production') {
 export async function testDatabaseConnection(): Promise<boolean> {
   try {
     await prisma.$queryRaw`SELECT 1`;
-    console.log('✅ Database connection successful');
+    console.log("✅ Database connection successful");
     return true;
   } catch (error) {
-    console.error('❌ Database connection failed:', error);
+    console.error("❌ Database connection failed:", error);
     return false;
   }
 }
