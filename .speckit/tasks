@@ -1,0 +1,899 @@
+# AI Calendar Agent - Implementation Tasks
+
+## Phase 0: Foundation ✅ COMPLETE
+
+- [x] Create Next.js 14 project with TypeScript
+- [x] Set up TailwindCSS and Shadcn UI
+- [x] Build landing page
+- [x] Create project structure
+- [x] Set up AI agents (UX/UI, Full Stack Dev, PM)
+- [x] Install and configure spec-kit
+- [x] Write project documentation
+- [x] Deploy landing page to Vercel
+
+**Status**: Complete (2025-11-12)
+
+---
+
+## Phase 1: Authentication & User Management
+
+**Goal**: Users can sign up, log in, and manage their profiles
+**Timeline**: 2 weeks (4-5 days of work)
+**Priority**: P0 (Critical)
+
+### 1.1 Environment Setup (Day 1)
+
+- [ ] Set up PostgreSQL database (Supabase)
+  - Create Supabase project
+  - Get database connection string
+  - Add to environment variables
+- [ ] Install Prisma
+  - `npm install prisma @prisma/client`
+  - `npx prisma init`
+- [ ] Install NextAuth.js
+  - `npm install next-auth @auth/prisma-adapter`
+- [ ] Set up Google OAuth credentials
+  - Create Google Cloud project
+  - Configure OAuth consent screen
+  - Generate client ID and secret
+  - Add to environment variables
+- [ ] Create `.env.local` and `.env.example` files
+
+**Assignee**: Full Stack Developer
+**Dependencies**: None
+
+### 1.2 Database Schema (Day 1)
+
+- [ ] Create Prisma schema for authentication
+  - User model
+  - Account model (for OAuth)
+  - Session model
+  - VerificationToken model
+- [ ] Run initial migration
+  - `npx prisma migrate dev --name init`
+- [ ] Generate Prisma Client
+  - `npx prisma generate`
+- [ ] Test database connection
+
+**Assignee**: Full Stack Developer
+**Dependencies**: 1.1 complete
+
+### 1.3 NextAuth Configuration (Day 2)
+
+- [ ] Create auth configuration
+  - `app/api/auth/[...nextauth]/route.ts`
+  - Configure Google provider
+  - Set up Prisma adapter
+  - Configure callbacks
+- [ ] Create auth utility functions
+  - `lib/auth.ts`
+  - Helper to get session
+  - Helper to protect routes
+- [ ] Test OAuth flow locally
+  - Sign in with Google
+  - Verify user created in database
+  - Check session management
+
+**Assignee**: Full Stack Developer
+**Dependencies**: 1.2 complete
+
+### 1.4 Sign In Page UI (Day 2)
+
+- [ ] Design sign-in page
+  - Create Figma/sketch mockup
+  - Get approval from PM
+- [ ] Implement sign-in page
+  - `app/auth/signin/page.tsx`
+  - Centered card layout
+  - Google sign-in button
+  - Loading states
+  - Error handling
+- [ ] Style with Shadcn UI
+  - Use Card, Button components
+  - Add gradient background
+  - Make responsive
+
+**Assignee**: UX/UI Agent (design), Full Stack Developer (implementation)
+**Dependencies**: 1.3 complete
+
+### 1.5 Protected Routes (Day 3)
+
+- [ ] Create middleware for route protection
+  - `middleware.ts`
+  - Protect `/dashboard/*` routes
+  - Protect `/settings/*` routes
+  - Redirect to signin if not authenticated
+- [ ] Create dashboard layout
+  - `app/(dashboard)/layout.tsx`
+  - Navbar with user info
+  - Sign out button
+  - Sidebar (placeholder)
+- [ ] Create placeholder dashboard page
+  - `app/(dashboard)/dashboard/page.tsx`
+  - Welcome message
+  - Next steps for user
+- [ ] Test route protection
+  - Try accessing dashboard without auth
+  - Verify redirect to signin
+  - Sign in and access dashboard
+
+**Assignee**: Full Stack Developer
+**Dependencies**: 1.4 complete
+
+### 1.6 User Profile (Day 3)
+
+- [ ] Design profile page
+  - User info display
+  - Edit form
+  - Avatar upload (future)
+- [ ] Implement profile API
+  - `app/api/user/profile/route.ts`
+  - GET: Return user data
+  - PATCH: Update user data
+- [ ] Implement profile page
+  - `app/(dashboard)/settings/profile/page.tsx`
+  - Display user info
+  - Edit form with React Hook Form
+  - Validation with Zod
+- [ ] Test profile management
+  - View profile
+  - Edit name
+  - Verify updates persist
+
+**Assignee**: UX/UI Agent (design), Full Stack Developer (implementation)
+**Dependencies**: 1.5 complete
+
+### 1.7 User Preferences (Day 4)
+
+- [ ] Add preferences to Prisma schema
+  - Add fields to User model:
+    - timezone
+    - workHoursStart
+    - workHoursEnd
+    - workDays
+    - breakDuration
+  - Run migration
+- [ ] Design preferences page
+  - Work hours selector
+  - Work days checkboxes
+  - Break duration input
+  - Timezone selector
+- [ ] Implement preferences API
+  - `app/api/user/preferences/route.ts`
+  - GET: Return preferences
+  - PATCH: Update preferences
+- [ ] Implement preferences page
+  - `app/(dashboard)/settings/preferences/page.tsx`
+  - Form with all preference fields
+  - Validation
+  - Save button with loading state
+- [ ] Test preferences
+  - Set work hours
+  - Save and reload page
+  - Verify persistence
+
+**Assignee**: Full Stack Developer
+**Dependencies**: 1.6 complete
+
+### 1.8 Testing & Polish (Day 5)
+
+- [ ] Write unit tests
+  - Auth API routes
+  - Utility functions
+  - Validation schemas
+- [ ] Write E2E tests
+  - Sign-in flow
+  - Profile editing
+  - Preferences saving
+- [ ] Manual testing checklist
+  - Sign up with new Google account
+  - Sign in with existing account
+  - Edit profile
+  - Set preferences
+  - Sign out
+  - Test on mobile
+- [ ] Fix bugs found during testing
+- [ ] Code review and refactor
+- [ ] Update documentation
+- [ ] Deploy to staging
+
+**Assignee**: Full Stack Developer, PM (testing)
+**Dependencies**: 1.7 complete
+
+### 1.9 Onboarding Flow (Optional for v1)
+
+- [ ] Design onboarding screens
+  - Welcome screen
+  - Set work hours
+  - Connect calendar (prompt)
+  - Create first task (prompt)
+- [ ] Implement onboarding
+  - `app/onboarding/page.tsx`
+  - Multi-step form
+  - Progress indicator
+  - Skip option
+- [ ] Redirect new users to onboarding
+- [ ] Save onboarding completion in database
+
+**Assignee**: UX/UI Agent, Full Stack Developer
+**Dependencies**: 1.7 complete
+**Priority**: Nice to have
+
+---
+
+## Phase 2: Calendar Integration
+
+**Goal**: Connect and sync Google Calendar and Outlook
+**Timeline**: 2 weeks
+**Priority**: P0 (Critical)
+
+### 2.1 Calendar Schema & API Foundation (Day 1)
+
+- [ ] Extend Prisma schema
+  - Calendar model
+  - CalendarEvent model
+  - Run migration
+- [ ] Create calendar API routes
+  - `app/api/calendars/route.ts`
+  - GET: List user's calendars
+  - POST: Connect calendar
+  - DELETE: Disconnect calendar
+- [ ] Create sync API
+  - `app/api/calendars/sync/route.ts`
+  - POST: Trigger manual sync
+
+**Assignee**: Full Stack Developer
+**Dependencies**: Phase 1 complete
+
+### 2.2 Google Calendar Integration (Days 2-3)
+
+- [ ] Update Google OAuth scopes
+  - Add calendar.readonly
+  - Add calendar.events
+  - Re-consent flow
+- [ ] Implement Google Calendar client
+  - `lib/calendar/google.ts`
+  - List calendars
+  - Fetch events
+  - Create/update events (future)
+- [ ] Implement initial sync
+  - Fetch all calendars
+  - Fetch events for each calendar
+  - Store in database
+- [ ] Implement incremental sync
+  - Use sync tokens
+  - Only fetch changes
+  - Handle deletions
+- [ ] Test Google Calendar sync
+  - Connect calendar
+  - Verify events imported
+  - Create event in Google Calendar
+  - Verify sync updates
+
+**Assignee**: Full Stack Developer
+**Dependencies**: 2.1 complete
+
+### 2.3 Calendar UI (Days 3-4)
+
+- [ ] Design calendar views
+  - List view
+  - Day view
+  - Week view
+- [ ] Implement calendar page
+  - `app/(dashboard)/calendar/page.tsx`
+  - Display synced events
+  - Filter by calendar
+  - Sync status indicator
+- [ ] Implement calendar connection flow
+  - Connect button
+  - OAuth popup
+  - Success/error handling
+- [ ] Add sync functionality
+  - Manual sync button
+  - Auto-sync every 15 minutes
+  - Show last sync time
+
+**Assignee**: UX/UI Agent (design), Full Stack Developer (implementation)
+**Dependencies**: 2.2 complete
+
+### 2.4 Microsoft Outlook Integration (Days 4-5)
+
+- [ ] Set up Microsoft Azure app
+  - Create app registration
+  - Configure OAuth
+  - Get client credentials
+- [ ] Implement Outlook client
+  - `lib/calendar/outlook.ts`
+  - List calendars
+  - Fetch events
+- [ ] Implement Outlook sync
+  - Similar to Google Calendar
+  - Handle Microsoft Graph API
+- [ ] Test Outlook integration
+
+**Assignee**: Full Stack Developer
+**Dependencies**: 2.3 complete
+**Priority**: Nice to have for v1
+
+### 2.5 Background Sync (Day 5)
+
+- [ ] Set up background job system
+  - Install Inngest or Bull Queue
+  - Configure workers
+- [ ] Create sync job
+  - Trigger every 15 minutes
+  - Sync all active calendars
+  - Handle errors gracefully
+- [ ] Add webhook support (optional)
+  - Google Calendar push notifications
+  - Outlook change notifications
+- [ ] Test background sync
+  - Verify syncs run automatically
+  - Check error handling
+
+**Assignee**: Full Stack Developer
+**Dependencies**: 2.3 complete
+
+### 2.6 Testing & Polish (Day 6)
+
+- [ ] Unit tests for calendar logic
+- [ ] Integration tests for sync
+- [ ] E2E tests for calendar connection
+- [ ] Manual testing
+- [ ] Bug fixes
+- [ ] Deploy to staging
+
+**Assignee**: Full Stack Developer, PM
+**Dependencies**: 2.5 complete
+
+---
+
+## Phase 3: Task Management
+
+**Goal**: Create, edit, and manage tasks
+**Timeline**: 3 weeks
+**Priority**: P0 (Critical)
+
+### 3.1 Task Schema & API (Day 1)
+
+- [ ] Task model already in Prisma schema (verify)
+- [ ] Create task API routes
+  - `app/api/tasks/route.ts`
+    - GET: List tasks (with filters)
+    - POST: Create task
+  - `app/api/tasks/[id]/route.ts`
+    - GET: Get task details
+    - PATCH: Update task
+    - DELETE: Delete task
+  - `app/api/tasks/[id]/complete/route.ts`
+    - POST: Mark task complete
+- [ ] Create validation schemas
+  - `lib/validations/task.ts`
+  - Zod schemas for create/update
+- [ ] Test API endpoints
+
+**Assignee**: Full Stack Developer
+**Dependencies**: Phase 2 complete
+
+### 3.2 Task List UI (Days 2-3)
+
+- [ ] Design task list
+  - Task cards
+  - Filters (priority, status, tags)
+  - Sort options
+  - Empty state
+- [ ] Implement task list
+  - `app/(dashboard)/tasks/page.tsx`
+  - Display all tasks
+  - Filter controls
+  - Sort dropdown
+- [ ] Implement task card
+  - `components/features/tasks/TaskCard.tsx`
+  - Show title, duration, priority
+  - Quick actions (complete, delete)
+  - Click to view details
+- [ ] Add loading and error states
+
+**Assignee**: UX/UI Agent (design), Full Stack Developer (implementation)
+**Dependencies**: 3.1 complete
+
+### 3.3 Create Task Flow (Day 3)
+
+- [ ] Design task creation form
+  - Title (required)
+  - Description (optional)
+  - Estimated duration (required)
+  - Priority selector
+  - Deadline picker
+  - Tags input
+- [ ] Implement task form
+  - `components/features/tasks/TaskForm.tsx`
+  - React Hook Form
+  - Zod validation
+  - Submit handler
+- [ ] Add task creation modal/page
+  - Trigger from "Add Task" button
+  - Success feedback
+  - Error handling
+- [ ] Test task creation
+
+**Assignee**: UX/UI Agent (design), Full Stack Developer (implementation)
+**Dependencies**: 3.2 complete
+
+### 3.4 Edit & Delete Tasks (Day 4)
+
+- [ ] Implement task detail page
+  - `app/(dashboard)/tasks/[id]/page.tsx`
+  - Display all task info
+  - Edit button
+  - Delete button
+- [ ] Reuse TaskForm for editing
+  - Pre-fill with existing data
+  - Update on submit
+- [ ] Implement delete confirmation
+  - Modal or dialog
+  - Confirm before deleting
+- [ ] Test editing and deleting
+
+**Assignee**: Full Stack Developer
+**Dependencies**: 3.3 complete
+
+### 3.5 Task Filters & Search (Day 5)
+
+- [ ] Implement filtering
+  - By status (TODO, IN_PROGRESS, COMPLETED)
+  - By priority
+  - By tags
+  - By deadline (overdue, today, this week)
+- [ ] Implement search
+  - Search by title/description
+  - Real-time search
+- [ ] Implement sorting
+  - By priority
+  - By deadline
+  - By created date
+- [ ] Persist filters in URL params
+
+**Assignee**: Full Stack Developer
+**Dependencies**: 3.4 complete
+
+### 3.6 Bulk Operations (Day 6)
+
+- [ ] Add checkbox selection
+  - Select individual tasks
+  - Select all
+- [ ] Implement bulk actions
+  - Mark multiple as complete
+  - Delete multiple
+  - Change priority in bulk
+  - Add tag to multiple
+- [ ] Show selection count
+- [ ] Add confirmation for bulk delete
+
+**Assignee**: Full Stack Developer
+**Dependencies**: 3.5 complete
+**Priority**: Nice to have
+
+### 3.7 Task Categories/Tags (Day 7)
+
+- [ ] Design tag system
+  - Tag creation
+  - Tag colors
+  - Tag management
+- [ ] Implement tag input
+  - Autocomplete
+  - Create new tags inline
+- [ ] Add tag filter
+  - Filter by single or multiple tags
+- [ ] Tag management page (optional)
+  - View all tags
+  - Edit/delete tags
+
+**Assignee**: Full Stack Developer
+**Dependencies**: 3.6 complete
+
+### 3.8 Testing & Polish (Days 8-9)
+
+- [ ] Unit tests
+- [ ] Integration tests
+- [ ] E2E tests for task flows
+- [ ] Manual testing
+- [ ] Bug fixes
+- [ ] Performance optimization
+- [ ] Deploy to staging
+
+**Assignee**: Full Stack Developer, PM
+**Dependencies**: 3.7 complete
+
+---
+
+## Phase 4: AI Scheduling Engine
+
+**Goal**: Automatically schedule tasks into calendar
+**Timeline**: 4 weeks
+**Priority**: P0 (Critical - This is the core value prop!)
+
+### 4.1 Scheduling Schema (Day 1)
+
+- [ ] Verify Schedule and ScheduleSlot models in Prisma
+- [ ] Run migration if needed
+- [ ] Create schedule API routes
+  - `app/api/schedule/generate/route.ts`
+  - `app/api/schedule/current/route.ts`
+  - `app/api/schedule/[id]/accept/route.ts`
+  - `app/api/schedule/[id]/reject/route.ts`
+
+**Assignee**: Full Stack Developer
+**Dependencies**: Phase 3 complete
+
+### 4.2 Rule-Based Scheduler V1 (Days 2-5)
+
+- [ ] Implement time slot finder
+  - `lib/ai/time-slots.ts`
+  - Find available slots in calendar
+  - Respect work hours
+  - Account for existing events
+- [ ] Implement task sorter
+  - Sort by priority
+  - Sort by deadline
+  - Combine both
+- [ ] Implement slot matcher
+  - Match task duration to slot
+  - Prefer morning for high-energy tasks
+  - Avoid back-to-back tasks
+- [ ] Implement schedule generator
+  - `lib/ai/scheduler.ts`
+  - Main scheduling algorithm
+  - Returns Schedule object
+- [ ] Add break insertion
+  - Insert breaks between tasks
+  - Configurable break duration
+- [ ] Test scheduling algorithm
+  - Various task combinations
+  - Different calendar states
+  - Edge cases
+
+**Assignee**: Full Stack Developer
+**Dependencies**: 4.1 complete
+
+### 4.3 Schedule UI (Days 6-7)
+
+- [ ] Design schedule view
+  - Timeline visualization
+  - Task blocks in calendar
+  - Accept/reject controls
+  - Regenerate option
+- [ ] Implement schedule view
+  - `components/features/schedule/ScheduleView.tsx`
+  - Display generated schedule
+  - Show reasoning for each placement
+  - Highlight conflicts
+- [ ] Implement schedule controls
+  - "Generate Schedule" button
+  - "Accept" button
+  - "Reject & Regenerate" button
+  - Loading states
+- [ ] Show before/after comparison
+  - Original task list
+  - Proposed schedule
+  - Time saved visualization
+
+**Assignee**: UX/UI Agent (design), Full Stack Developer (implementation)
+**Dependencies**: 4.2 complete
+
+### 4.4 Manual Adjustments (Day 8)
+
+- [ ] Allow dragging tasks to different slots
+  - Drag and drop interface
+  - Update schedule on drop
+- [ ] Allow editing scheduled tasks
+  - Change time
+  - Change duration
+- [ ] Validate manual changes
+  - Check for conflicts
+  - Warn if overlapping
+- [ ] Regenerate affected slots
+  - If one task moves, adjust others
+
+**Assignee**: Full Stack Developer
+**Dependencies**: 4.3 complete
+
+### 4.5 Dynamic Rescheduling (Days 9-10)
+
+- [ ] Detect calendar changes
+  - New meetings added
+  - Existing events moved/deleted
+- [ ] Implement conflict detection
+  - Check if scheduled tasks conflict
+  - Flag affected tasks
+- [ ] Implement auto-reschedule
+  - Automatically move conflicting tasks
+  - Find next available slot
+- [ ] Notify user of changes
+  - Show what was rescheduled
+  - Option to undo
+- [ ] Test dynamic rescheduling
+  - Add meeting during scheduled task
+  - Verify task moves automatically
+
+**Assignee**: Full Stack Developer
+**Dependencies**: 4.4 complete
+
+### 4.6 AI Learning (Days 11-13)
+
+- [ ] Track actual vs. estimated duration
+  - When task marked complete, save actualMinutes
+  - Compare to estimatedMinutes
+- [ ] Build user history
+  - Aggregate historical data
+  - Calculate average overrun per task type
+- [ ] Adjust future estimates
+  - If user consistently underestimates, add buffer
+  - Learn per-category patterns
+- [ ] Implement OpenAI integration (optional)
+  - `lib/ai/ml-scheduler.ts`
+  - Use GPT-4 for smarter scheduling
+  - Provide user context and history
+  - Parse AI suggestions
+- [ ] A/B test AI vs. rule-based
+  - Compare acceptance rates
+  - Track user preference
+
+**Assignee**: Full Stack Developer
+**Dependencies**: 4.5 complete
+**Priority**: V2 feature (rule-based is fine for V1)
+
+### 4.7 Capacity Warnings (Day 14)
+
+- [ ] Calculate available capacity
+  - Sum work hours in week
+  - Subtract existing events
+  - = Available hours
+- [ ] Calculate task demand
+  - Sum estimated duration of all tasks
+- [ ] Warn if overbooked
+  - If demand > capacity, show warning
+  - Suggest tasks to postpone
+  - Show capacity gauge
+- [ ] Display capacity on dashboard
+  - Visual gauge (0-100%)
+  - "You have X hours available this week"
+
+**Assignee**: Full Stack Developer
+**Dependencies**: 4.6 complete
+
+### 4.8 Testing & Polish (Days 15-16)
+
+- [ ] Unit tests for scheduling logic
+- [ ] Integration tests for scheduling API
+- [ ] E2E tests for schedule generation
+- [ ] Manual testing with real calendars
+- [ ] Performance optimization (schedule in < 3s)
+- [ ] Bug fixes
+- [ ] Deploy to staging
+- [ ] Beta test with 10 users
+- [ ] Gather feedback and iterate
+
+**Assignee**: Full Stack Developer, PM, Beta users
+**Dependencies**: 4.7 complete
+
+---
+
+## Phase 5: Dashboard & Analytics
+
+**Goal**: Visualize productivity and time usage
+**Timeline**: 2 weeks
+**Priority**: P1 (Important but not critical)
+
+### 5.1 Dashboard Overview (Days 1-2)
+
+- [ ] Design dashboard layout
+  - Today's schedule widget
+  - Upcoming deadlines widget
+  - Completed tasks widget
+  - Capacity gauge
+- [ ] Implement dashboard page
+  - `app/(dashboard)/dashboard/page.tsx`
+  - Fetch and display data
+  - Real-time updates
+- [ ] Add quick actions
+  - "Add Task" button
+  - "Generate Schedule" button
+  - "Sync Calendars" button
+
+**Assignee**: UX/UI Agent (design), Full Stack Developer (implementation)
+**Dependencies**: Phase 4 complete
+
+### 5.2 Time Analytics (Days 3-5)
+
+- [ ] Design analytics page
+  - Time breakdown charts
+  - Productivity trends
+  - Task completion rates
+- [ ] Implement analytics API
+  - `app/api/analytics/time-breakdown/route.ts`
+  - `app/api/analytics/productivity/route.ts`
+  - `app/api/analytics/accuracy/route.ts`
+- [ ] Implement analytics page
+  - `app/(dashboard)/analytics/page.tsx`
+  - Charts with Recharts or Chart.js
+  - Date range selector
+- [ ] Add insights
+  - "You complete most tasks on Tuesdays"
+  - "You underestimate by 20% on average"
+  - "Your productivity peaks at 10 AM"
+
+**Assignee**: Full Stack Developer
+**Dependencies**: 5.1 complete
+
+### 5.3 Reports (Days 6-7)
+
+- [ ] Weekly report
+  - Tasks completed
+  - Time spent
+  - Goals achieved
+- [ ] Monthly report
+  - Aggregate stats
+  - Trends over time
+- [ ] Email reports (optional)
+  - Send weekly summary email
+  - Use Resend for email delivery
+
+**Assignee**: Full Stack Developer
+**Dependencies**: 5.2 complete
+
+### 5.4 Goals & Streaks (Days 8-9)
+
+- [ ] Implement goal setting
+  - "Complete X tasks per week"
+  - "Work Y hours per week"
+  - Custom goals
+- [ ] Track goal progress
+  - Show progress bars
+  - Celebrate when achieved
+- [ ] Implement streaks
+  - Days with all tasks completed
+  - Longest streak
+  - Current streak
+- [ ] Gamification elements
+  - Badges
+  - Achievements
+  - Milestones
+
+**Assignee**: Full Stack Developer
+**Dependencies**: 5.3 complete
+**Priority**: Nice to have
+
+### 5.5 Testing & Polish (Day 10)
+
+- [ ] Tests
+- [ ] Manual testing
+- [ ] Bug fixes
+- [ ] Deploy
+
+**Assignee**: Full Stack Developer, PM
+**Dependencies**: 5.4 complete
+
+---
+
+## Phase 6: Advanced Features & Polish
+
+**Goal**: Power user features and refinements
+**Timeline**: Ongoing
+**Priority**: P2 (Future)
+
+### 6.1 Recurring Tasks
+
+- [ ] Design recurring task UI
+- [ ] Implement recurrence rules (RRULE)
+- [ ] Schedule recurring tasks
+- [ ] Handle exceptions (skip instances)
+
+### 6.2 Task Templates
+
+- [ ] Create task template model
+- [ ] UI to create templates
+- [ ] Quick create from template
+- [ ] Share templates (future)
+
+### 6.3 API Access
+
+- [ ] Design public API
+- [ ] Implement API keys
+- [ ] Rate limiting
+- [ ] Documentation with OpenAPI/Swagger
+
+### 6.4 Mobile Apps
+
+- [ ] React Native setup
+- [ ] iOS app
+- [ ] Android app
+- [ ] Push notifications
+
+### 6.5 Team Features
+
+- [ ] Multi-user workspaces
+- [ ] Shared calendars
+- [ ] Task delegation
+- [ ] Team analytics
+
+### 6.6 Integrations
+
+- [ ] Slack notifications
+- [ ] Notion sync
+- [ ] Linear integration
+- [ ] Zapier integration
+- [ ] Email to task
+
+---
+
+## Infrastructure Tasks
+
+### DevOps
+
+- [ ] Set up staging environment
+- [ ] Set up production environment
+- [ ] Configure CI/CD pipeline
+- [ ] Set up monitoring (Sentry)
+- [ ] Set up analytics
+- [ ] Configure backups
+- [ ] Set up error alerts
+- [ ] Performance monitoring
+
+### Security
+
+- [ ] Security audit
+- [ ] Penetration testing
+- [ ] GDPR compliance review
+- [ ] Privacy policy
+- [ ] Terms of service
+- [ ] Cookie consent
+
+### Documentation
+
+- [ ] API documentation
+- [ ] User guide
+- [ ] FAQ
+- [ ] Troubleshooting guide
+- [ ] Developer documentation
+
+---
+
+## Current Status
+
+**Completed**: Phase 0 (Foundation)
+
+**In Progress**: Phase 1 (Authentication)
+- Specification complete
+- Ready for UX/UI to design sign-in page
+- Ready for Full Stack Dev to begin implementation
+
+**Next Up**:
+1. UX/UI: Design sign-in page
+2. Full Stack Dev: Set up environment and database
+3. Full Stack Dev: Implement authentication
+4. PM: Create specs for onboarding and profile management
+
+---
+
+## Notes
+
+- Tasks marked with ✅ are completed
+- Tasks marked with [ ] are pending
+- Priority: P0 = Must have, P1 = Should have, P2 = Nice to have
+- Assignee: Who should work on this task
+- Dependencies: What must be done before starting this task
+
+## How to Use This File
+
+1. Pick a task from the current phase
+2. Check dependencies are complete
+3. Work on the task
+4. Mark as complete when done
+5. Move to next task
+
+Coordinate between agents:
+- PM defines specs
+- UX/UI designs interfaces
+- Full Stack Dev implements
+- PM reviews against acceptance criteria
