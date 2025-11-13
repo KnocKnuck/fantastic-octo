@@ -1,0 +1,225 @@
+# AI Calendar Agent - Project Constitution
+
+## Project Vision
+Build a modern, intelligent SaaS application that transforms how professionals manage their time by automatically planning tasks within their existing calendar systems.
+
+## Core Principles
+
+### 1. User-Centric Design
+- Prioritize simplicity and intuitive user experience
+- Minimize cognitive load through intelligent automation
+- Design for accessibility and inclusivity
+
+### 2. Technical Excellence
+- Write clean, maintainable, and well-documented code
+- Follow Next.js 14 and React best practices
+- Use TypeScript for type safety
+- Implement comprehensive error handling
+- Write tests for critical functionality
+
+### 3. Performance & Scalability
+- Optimize for fast page loads and smooth interactions
+- Build with scalability in mind from day one
+- Implement efficient database queries
+- Use proper caching strategies
+
+### 4. Security & Privacy
+- Protect user data with industry-standard encryption
+- Follow OAuth 2.0 best practices
+- Implement proper authentication and authorization
+- Never log sensitive information
+- Comply with GDPR and data privacy regulations
+
+### 5. Development Workflow
+- Use Git with meaningful commit messages
+- Follow conventional commits specification
+- Create feature branches for all changes
+- Write comprehensive documentation
+- Review code before merging
+
+### 6. Design System Consistency
+- Use Shadcn UI components consistently
+- Follow the established color palette and typography
+- Maintain responsive design patterns
+- Ensure dark mode compatibility (future)
+
+## Tech Stack Commitments
+
+### Frontend
+- **Framework**: Next.js 14 (App Router)
+- **Language**: TypeScript
+- **Styling**: TailwindCSS
+- **UI Components**: Shadcn UI
+- **Animations**: Framer Motion
+- **State Management**: React Context / Zustand (when needed)
+
+### Backend (Future)
+- **API**: Next.js API Routes / tRPC
+- **Database**: PostgreSQL with Prisma ORM
+- **Authentication**: NextAuth.js with OAuth providers
+- **File Storage**: AWS S3 / Cloudflare R2
+- **Email**: Resend / SendGrid
+
+### Infrastructure
+- **Hosting**: Vercel
+- **Database**: Supabase / Railway
+- **CI/CD**: GitHub Actions
+- **Monitoring**: Sentry
+
+## Development Standards
+
+### Code Quality
+- All TypeScript code must pass `npm run lint`
+- Components must be properly typed
+- Avoid `any` types unless absolutely necessary
+- Use meaningful variable and function names
+- Keep functions small and focused (< 50 lines)
+
+### Component Structure
+```
+components/
+├── ui/           # Shadcn UI base components
+├── features/     # Feature-specific components
+├── layouts/      # Layout components
+└── shared/       # Shared/reusable components
+```
+
+### File Naming
+- Components: PascalCase (e.g., `UserProfile.tsx`)
+- Utilities: camelCase (e.g., `formatDate.ts`)
+- Constants: UPPER_SNAKE_CASE (e.g., `API_ENDPOINTS.ts`)
+
+### Testing
+- Unit tests for utilities and hooks
+- Integration tests for critical user flows
+- E2E tests for main features (Playwright)
+
+## Non-Negotiables
+
+1. **No hardcoded secrets** - Always use environment variables
+2. **Mobile-first** - All features must work on mobile
+3. **Accessibility** - WCAG 2.1 Level AA compliance
+4. **Performance** - Lighthouse score > 90
+5. **Type Safety** - No bypassing TypeScript errors
+
+## Team Structure & Organization
+
+### Team Size: 40 People
+Organized into 6 cross-functional squads aligned to strategic initiatives.
+
+### Organizational Model
+- **Framework**: Agile at Scale (SAFe-inspired)
+- **Squads**: 6 cross-functional teams (6-7 people each)
+- **Sprint Cadence**: 2 weeks
+- **PI Planning**: Every 3 months (6 sprints)
+
+### Key Roles
+- **Portfolio Manager** (1): Strategic alignment, budget, resource allocation
+- **Product Owner** (1): Product vision, backlog prioritization
+- **Product Managers** (2): Initiative ownership, feature specs
+- **Program Manager** (1): Cross-initiative coordination, dependencies
+- **Scrum Masters** (2): Sprint facilitation, blocker removal
+- **Engineering Manager** (1): Technical strategy, team performance
+- **Tech Lead** (1): Architecture, code quality
+- **Engineers** (18): Full stack, frontend, backend, DevOps, QA
+- **Design Team** (4): Design lead, product designers, UX researcher
+- **Data & AI** (3): ML engineer, data engineer, data analyst
+- **Marketing & Growth** (4): Head of marketing, growth PM, content, SEO
+- **Support & Operations** (3): Customer success lead, support engineer, legal/compliance
+
+### Squad Organization
+1. **Squad Alpha**: Core Product (Auth, Calendar, Tasks)
+2. **Squad Beta**: AI & Integrations
+3. **Squad Gamma**: Platform & Infrastructure
+4. **Squad Delta**: Enterprise & Admin
+5. **Squad Epsilon**: User Experience & Growth
+6. **Squad Zeta**: Data & Insights
+
+**See**: `.speckit/team-structure.md` for full org chart and role descriptions
+
+## Collaboration Guidelines
+
+### For Product Managers
+- Define clear initiative goals and success metrics
+- Write user stories with acceptance criteria
+- Prioritize backlog based on business value
+- Stakeholder communication and alignment
+
+### For Engineers (All Levels)
+- Follow technical standards (TypeScript, tests, documentation)
+- Participate in code reviews
+- Estimate story points accurately
+- Communicate blockers early
+- Mentor junior team members
+
+### For Designers
+- Create accessible, inclusive designs (WCAG 2.1 AA)
+- Maintain design system consistency
+- Collaborate with engineers during implementation
+- Conduct user research and usability testing
+
+### For Data & AI Team
+- Build scalable data pipelines
+- Ensure AI algorithms are explainable
+- Track and improve model performance
+- Partner with product on A/B tests
+
+### For Marketing & Growth
+- Drive user acquisition through SEO, content, and paid channels
+- Optimize onboarding and activation funnels
+- Build viral growth loops (referrals, social sharing)
+- Measure and report on growth metrics
+
+### For Support & Operations
+- Provide excellent customer support (SLA: < 4h response)
+- Document common issues in help center
+- Escalate bugs to engineering with reproduction steps
+- Ensure legal/compliance requirements are met
+
+## Working Agreements
+
+### Communication
+- **Slack**: Primary communication (see channels in team-structure.md)
+- **Jira**: Work tracking and sprint planning
+- **Notion**: Documentation and knowledge base
+- **Figma**: Design collaboration
+- **GitHub**: Code collaboration
+
+### Meetings
+- **Daily Standup**: 15 min (squad-level)
+- **Sprint Planning**: 2 hours (every 2 weeks)
+- **Sprint Review**: 1 hour (demo completed work)
+- **Sprint Retrospective**: 1 hour (continuous improvement)
+- **Backlog Refinement**: 1 hour mid-sprint
+- **All-Hands**: 1 hour monthly
+
+### Decision Making
+- **Product decisions**: Product Owner (with PM input)
+- **Technical decisions**: Tech Lead + Engineering Manager
+- **Design decisions**: Design Lead
+- **Resource allocation**: Portfolio Manager
+
+## Success Metrics
+
+### Product Metrics
+- **Performance**: < 2s initial page load
+- **Uptime**: 99.5% availability
+- **User Satisfaction**: NPS > 50
+- **Activation Rate**: 60%
+- **30-Day Retention**: 50%
+
+### Engineering Metrics
+- **Deployment Frequency**: 2-3 per week
+- **Lead Time**: < 24 hours (commit to production)
+- **Code Coverage**: 80%+
+- **Bug Rate**: < 5%
+- **Sprint Velocity**: 300 points/sprint (combined)
+
+### Business Metrics
+- **MRR Growth**: 30% MoM
+- **CAC**: < $150
+- **LTV:CAC**: > 3:1
+- **Free-to-Paid Conversion**: 15%
+- **Monthly Churn**: < 5%
+
+**See**: `.speckit/okrs-kpis.md` for detailed OKRs and KPIs

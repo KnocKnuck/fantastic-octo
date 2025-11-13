@@ -1,0 +1,516 @@
+# AI Calendar Agent - Project Specification
+
+## What We're Building
+
+**AI Calendar Agent** is an intelligent SaaS application that automatically schedules tasks into users' existing calendars (Google Calendar and Microsoft Outlook) using AI, eliminating the mental burden of manual time planning.
+
+## The Problem
+
+### Current State
+Professionals spend **4-8 hours per week** manually planning their schedules:
+- Dragging tasks into calendar slots (calendar Tetris)
+- Estimating how long tasks will take
+- Reorganizing when priorities change
+- Juggling meetings with work blocks
+- Forgetting to schedule important tasks
+- Feeling overwhelmed by planning overhead
+
+### Pain Points
+1. **Mental Load**: Constant decision-making about "when to do what"
+2. **Time Waste**: Hours spent on scheduling instead of doing work
+3. **Poor Estimates**: People consistently underestimate task duration
+4. **Inflexibility**: Manual schedules break when things change
+5. **Overcommitment**: No visibility into actual capacity
+6. **Stress**: Anxiety about whether everything will get done
+
+### Who This Affects
+- **Knowledge workers**: Engineers, designers, consultants, managers
+- **Freelancers**: Juggling multiple clients and projects
+- **Entrepreneurs**: Need to maximize limited time
+- **Students**: Balancing coursework, projects, and life
+- **Anyone overwhelmed by calendar management**
+
+### Existing Solutions (and Why They Fall Short)
+
+**Motion.app** ($34/month)
+- ❌ Too expensive for individuals
+- ❌ Complex interface with steep learning curve
+- ❌ Overkill for solo users
+- ✅ Good AI scheduling (we'll match this)
+
+**Reclaim.ai**
+- ❌ Focused on meeting defense, not task scheduling
+- ❌ Doesn't help with task management
+- ✅ Good calendar integration (we'll match this)
+
+**Todoist / Notion / Asana**
+- ❌ No calendar integration
+- ❌ Still requires manual scheduling
+- ❌ Task lists don't prevent overcommitment
+
+**Google Calendar / Outlook**
+- ❌ Purely manual scheduling
+- ❌ No AI assistance
+- ❌ No task intelligence
+
+## Our Solution
+
+### Core Concept
+**"Plan your day without thinking."**
+
+Users simply:
+1. **Add tasks** → "Write blog post (2 hours)"
+2. **Connect calendar** → Google or Outlook (one-time)
+3. **Let AI schedule** → System automatically fills open slots
+
+The AI handles:
+- Finding optimal time slots
+- Respecting existing commitments
+- Adapting when plans change
+- Learning user preferences
+- Preventing overcommitment
+- Balancing work with breaks
+
+### Key Innovation
+Instead of another task list or calendar app, we **bridge the gap** between tasks and time by making scheduling **automatic and intelligent**.
+
+## How It Works
+
+### User Journey
+
+#### Initial Setup (5 minutes)
+1. User signs up with Google account
+2. Grants calendar access (OAuth)
+3. Completes quick onboarding (work hours, preferences)
+4. System syncs existing calendar
+
+#### Daily Use (30 seconds per task)
+1. User adds task: "Design homepage mockup"
+2. Estimates time: 3 hours
+3. Sets priority: High
+4. Clicks "Schedule"
+5. AI instantly places it in optimal slot
+6. User sees updated calendar
+
+#### When Plans Change
+- Meeting gets scheduled → AI automatically reschedules affected tasks
+- Task takes longer → AI adjusts remaining schedule
+- New urgent task → AI reprioritizes and reschedules
+- User works better in mornings → AI learns and adapts
+
+### The AI Engine
+
+**Inputs**:
+- User's available time (from calendar sync)
+- Task list with estimates and priorities
+- User preferences (work hours, break frequency)
+- Historical patterns (how long tasks actually take)
+- Energy levels throughout day
+
+**Processing**:
+- Constraint satisfaction (hard deadlines, meetings)
+- Priority optimization (high-priority first)
+- Energy matching (hard tasks when energy is high)
+- Buffer insertion (prevent back-to-back exhaustion)
+- Learning from actual vs. estimated time
+
+**Outputs**:
+- Optimized schedule with all tasks placed
+- Realistic capacity assessment
+- Warnings if overcommitted
+- Suggestions for what to postpone
+
+## What Success Looks Like
+
+### User Outcomes
+- **6+ hours saved per week** on planning
+- **Zero mental overhead** for scheduling decisions
+- **Realistic schedules** that actually work
+- **Better work-life balance** with enforced breaks
+- **Less stress** from calendar chaos
+
+### Business Outcomes
+- **10,000 paying users** in Year 1
+- **70% free-to-paid conversion** rate
+- **NPS > 50** (users love it and recommend it)
+- **< 5% monthly churn** (high retention)
+- **$1.4M ARR** by end of Year 2
+
+### Product Metrics
+- **< 2 minutes** to create account and add first task
+- **< 3 seconds** to generate schedule
+- **85%+ acceptance rate** of AI suggestions
+- **99.9% uptime** for calendar sync
+- **< 1% error rate** on API calls
+
+## Core Features (What We're Shipping)
+
+### Phase 1: Foundation (MVP - 4 weeks)
+
+**User Authentication**
+- Sign up with Google OAuth
+- Secure session management
+- Profile management
+- Settings page
+
+**Why this first**: Can't do anything without users and auth
+
+### Phase 2: Calendar Integration (2 weeks)
+
+**Google Calendar Sync**
+- OAuth consent flow
+- Real-time bidirectional sync
+- Display user's events
+- Multi-calendar support
+
+**Microsoft Outlook Sync** (optional for MVP)
+- OAuth consent flow
+- Sync with Exchange
+- Display events
+
+**Why this second**: Need calendar data before we can schedule into it
+
+### Phase 3: Task Management (3 weeks)
+
+**Task CRUD**
+- Create tasks with title, description
+- Estimate duration (required)
+- Set priority (Low/Medium/High/Urgent)
+- Edit and delete tasks
+- Bulk operations
+
+**Task Organization**
+- Categories/tags
+- Filters and search
+- Sort by priority/date
+- Archive completed tasks
+
+**Why this third**: Need tasks before we can schedule them
+
+### Phase 4: AI Scheduling Engine (4 weeks)
+
+**Automatic Scheduling**
+- Analyze available time slots
+- Place tasks optimally
+- Respect constraints (deadlines, work hours)
+- Insert breaks automatically
+- Handle conflicts intelligently
+
+**Dynamic Rescheduling**
+- Detect calendar changes
+- Automatically adjust affected tasks
+- Notify user of changes
+- Allow manual overrides
+
+**Learning Algorithm**
+- Track actual vs. estimated duration
+- Improve time estimates
+- Learn user preferences
+- Adapt to productivity patterns
+
+**Why this fourth**: This is the core value proposition
+
+### Phase 5: Dashboard & Analytics (2 weeks)
+
+**Personal Dashboard**
+- Today's schedule at a glance
+- Upcoming deadlines
+- Completed tasks
+- Capacity gauge (am I overbooked?)
+
+**Time Analytics**
+- Weekly time breakdown
+- Productivity trends
+- Task completion rates
+- Time estimation accuracy
+
+**Why this fifth**: Helps users understand their time usage
+
+### Phase 6: Advanced Features (Ongoing)
+
+**Power User Features**
+- Recurring tasks
+- Task templates
+- Batch scheduling
+- API access
+- Webhooks
+
+**Collaboration** (Future)
+- Team workspaces
+- Shared calendars
+- Task delegation
+- Team analytics
+
+**Integrations** (Future)
+- Slack notifications
+- Notion sync
+- Linear integration
+- Email to task
+- Mobile apps (iOS/Android)
+
+## What We're NOT Building
+
+### Out of Scope (For Now)
+
+❌ **Team collaboration** - Phase 1-5 are single-user only
+❌ **Mobile apps** - Web-first, mobile later
+❌ **Time tracking** - Focus on planning, not tracking
+❌ **Meeting scheduling** - Use Calendly for that
+❌ **Project management** - Not competing with Asana/Linear
+❌ **Chat/Communication** - Not building Slack
+❌ **File storage** - Not building Google Drive
+❌ **Email integration** - Maybe later
+❌ **Custom calendar apps** - We integrate, not replace
+
+### Why These Limits
+
+**Focus**: Do one thing exceptionally well (AI task scheduling)
+**Speed**: Ship MVP faster without scope creep
+**Market**: Single users first, teams later
+**Resources**: Small team, limited time
+**Validation**: Prove value before expanding
+
+## Who It's For
+
+### Primary Persona: Sarah, the Overwhelmed Senior Designer
+
+**Demographics**:
+- Age: 32
+- Role: Senior Product Designer at tech company
+- Income: $120k/year
+- Location: Urban, hybrid work
+
+**Behaviors**:
+- Uses Google Calendar religiously
+- Manages 10-15 tasks per week
+- Attends 5-10 meetings per week
+- Tries every productivity app
+- Reads productivity blogs
+
+**Pain Points**:
+- Spends Sunday evenings planning the week
+- Constantly rearranges calendar when meetings pop up
+- Underestimates task duration
+- Feels guilty when tasks slip
+- Anxiety about whether she can deliver everything
+
+**Goals**:
+- Spend less time planning, more doing
+- Realistic schedules that work
+- Better work-life boundaries
+- Feel in control of time
+
+**Quote**: *"I spend 3 hours every Sunday planning my week, and by Tuesday it's already broken. I just want something to handle this for me."*
+
+### Secondary Persona: Marcus, the Solo Consultant
+
+**Demographics**:
+- Age: 41
+- Role: Independent business consultant
+- Income: $150k/year (variable)
+- Location: Suburban, remote work
+
+**Behaviors**:
+- Juggles 3-5 clients simultaneously
+- Uses both Google Calendar and Outlook (clients)
+- Values efficiency highly
+- Willing to pay for time-saving tools
+- Early adopter of AI tools
+
+**Pain Points**:
+- Client meetings constantly shifting
+- Hard to estimate project time
+- Overbooks himself
+- Works evenings/weekends to catch up
+- No visibility into actual capacity
+
+**Goals**:
+- Maximize billable hours
+- Never overcommit again
+- Automate scheduling overhead
+- Work smarter, not longer
+
+**Quote**: *"I lose 5 hours a week just moving things around in my calendar. That's billable time I'm wasting."*
+
+## Why Now?
+
+### Market Timing
+
+**AI Maturity**
+- LLMs are now good enough for scheduling decisions
+- AI tools are mainstream (ChatGPT, Copilot)
+- Users trust AI for personal tasks
+
+**Remote Work**
+- More professionals managing own time
+- Increased calendar complexity
+- Need for better time management tools
+
+**Productivity Fatigue**
+- Users tired of manual systems
+- Want automation, not more apps
+- Willing to pay for time savings
+
+**Calendar APIs**
+- Google/Microsoft have robust APIs
+- OAuth flows are standard
+- Real-time sync is reliable
+
+### Competitive Gap
+
+**Motion** is too expensive and complex
+**Reclaim** doesn't do task scheduling
+**No one** has nailed the "AI task scheduler" for individuals at accessible pricing
+
+**We can win by being**: Simpler, cheaper, better UX, individual-focused
+
+## Value Proposition
+
+### For Users
+
+**Time Savings**
+- Reclaim 6+ hours per week from planning
+- Reduce context switching
+- Eliminate scheduling decisions
+
+**Mental Peace**
+- No more calendar Tetris
+- Confidence in realistic schedules
+- Clear visibility into capacity
+
+**Better Results**
+- More tasks completed
+- Fewer missed deadlines
+- Improved work-life balance
+- Less burnout
+
+### For Business
+
+**Pricing**
+- **Free tier**: 20 tasks/month, 1 calendar, basic scheduling
+- **Pro tier**: $12/month - Unlimited tasks, multiple calendars, advanced AI, analytics
+- **Teams tier**: $10/user/month - Collaboration features (future)
+
+**Unit Economics**
+- CAC: $30 (content marketing, SEO)
+- LTV: $288 (2 year avg retention × $12/mo)
+- LTV:CAC = 9.6:1 (healthy)
+
+**Revenue Projections**
+- Year 1: 1,000 paid users = $144k ARR
+- Year 2: 10,000 paid users = $1.44M ARR
+- Year 3: 50,000 paid users = $7.2M ARR
+
+### ROI for Users
+
+**Cost**: $12/month = $144/year
+**Time saved**: 6 hours/week × 50 weeks = 300 hours/year
+**Value of time**: $50/hour (conservative) × 300 = $15,000/year
+**ROI**: 104x
+
+Even at $25/hour, ROI is 52x. **It's a no-brainer.**
+
+## Why We'll Win
+
+### Competitive Advantages
+
+1. **Simplicity**: Easiest to use, fastest to value
+2. **Price**: Half the cost of Motion ($12 vs $34)
+3. **Focus**: Built for individuals, not enterprise
+4. **UX**: Modern, delightful, fast
+5. **AI-First**: Designed around AI from day one
+6. **Open**: API access, integrations, extensible
+
+### Defensibility
+
+**Data moat**: The more you use it, the better it gets (learning algorithm)
+**Network effects**: Future team features create lock-in
+**Brand**: First-mover in "AI task scheduler" category
+**Integration depth**: Deep calendar integration is hard to replicate
+
+## Success Criteria
+
+### Launch Goals (3 months)
+
+- [ ] 1,000 beta signups
+- [ ] 70% complete onboarding
+- [ ] 40% schedule at least 1 task
+- [ ] NPS > 40
+- [ ] < 5% error rate
+
+### 6-Month Goals
+
+- [ ] 5,000 total users
+- [ ] 500 paying users (10% conversion)
+- [ ] $6k MRR
+- [ ] NPS > 50
+- [ ] < 3% monthly churn
+
+### 1-Year Goals
+
+- [ ] 20,000 total users
+- [ ] 3,000 paying users (15% conversion)
+- [ ] $36k MRR ($432k ARR)
+- [ ] NPS > 60
+- [ ] < 2% monthly churn
+- [ ] Break-even on operations
+
+## Risks & Mitigation
+
+### Technical Risks
+
+**AI scheduling accuracy**
+- Start with rule-based system
+- Iterate based on user feedback
+- Add ML gradually
+
+**Calendar API rate limits**
+- Aggressive caching
+- Batch requests
+- Monitor usage closely
+
+**Sync reliability**
+- Implement retry logic
+- Show sync status clearly
+- Handle conflicts gracefully
+
+### Business Risks
+
+**User acquisition cost too high**
+- Focus on SEO and content marketing
+- Build referral program
+- Leverage social proof
+
+**Low free-to-paid conversion**
+- Optimize onboarding
+- A/B test pricing
+- Add value to free tier to create habit
+
+**Competition from Motion**
+- Compete on price and simplicity
+- Target different segment (individuals)
+- Ship faster, iterate faster
+
+## Open Questions
+
+- [ ] Should we support both Google and Outlook in Phase 2, or Google-only?
+- [ ] What's the right free tier limit? (20 tasks/month or different metric?)
+- [ ] Should we build mobile apps in Year 1 or Year 2?
+- [ ] Do we need a Chrome extension for quick task capture?
+- [ ] Should AI scheduling be optional or always-on?
+
+## Conclusion
+
+AI Calendar Agent solves a **universal problem** (scheduling is hard) with a **proven approach** (AI automation) at an **accessible price** ($12/month) for a **large market** (millions of knowledge workers).
+
+**We can build this in 6 months and reach profitability in 12 months.**
+
+The question isn't "will this work?" but "how fast can we ship?"
+
+---
+
+**Next Steps**:
+1. Review and approve this specification
+2. Create technical plan (.speckit/plan)
+3. Break down into tasks (.speckit/tasks)
+4. Begin Phase 1 implementation (authentication)

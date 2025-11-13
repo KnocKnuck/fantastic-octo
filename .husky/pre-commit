@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+
+# Run lint-staged for staged files
+npx lint-staged
+
+# Run type check
+echo "Running TypeScript type check..."
+npx tsc --noEmit
+
+# Run tests related to changed files
+echo "Running tests..."
+npm test -- --passWithNoTests --bail --findRelatedTests

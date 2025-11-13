@@ -1,0 +1,1218 @@
+# AI Calendar Agent - Technical Plan
+
+## Architecture Overview
+
+### System Architecture
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                         Frontend (Vercel)                    │
+│  ┌──────────────────────────────────────────────────────┐  │
+│  │  Next.js 14 App Router + React 19                    │  │
+│  │  - Server Components for performance                  │  │
+│  │  - Client Components for interactivity               │  │
+│  │  - Shadcn UI + TailwindCSS                          │  │
+│  └──────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────┘
+                              │
+                              │ API Requests
+                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│                    Backend (Next.js API)                     │
+│  ┌──────────────────────────────────────────────────────┐  │
+│  │  Next.js API Routes                                   │  │
+│  │  - /api/auth/* (NextAuth.js)                         │  │
+│  │  - /api/tasks/* (CRUD operations)                    │  │
+│  │  - /api/calendar/* (sync, events)                    │  │
+│  │  - /api/schedule/* (AI scheduling)                   │  │
+│  └──────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────┘
+        │                    │                    │
+        │                    │                    │
+        ▼                    ▼                    ▼
+┌──────────────┐    ┌──────────────┐    ┌──────────────┐
+│  PostgreSQL  │    │ Google/MSFT  │    │   OpenAI     │
+│  (Supabase)  │    │   Calendar   │    │   API        │
+│              │    │     APIs     │    │  (GPT-4)     │
+└──────────────┘    └──────────────┘    └──────────────┘
+```
+
+### Technology Stack
+
+#### Frontend
+```typescript
+{
+  "framework": "Next.js 14.x",
+  "runtime": "React 19.x",
+  "language": "TypeScript 5.x",
+  "styling": "TailwindCSS 3.x",
+  "ui": "Shadcn UI",
+  "animations": "Framer Motion 12.x",
+  "icons": "Lucide React",
+  "forms": "React Hook Form 7.x",
+  "validation": "Zod 3.x",
+  "state": "React Context + Zustand (when needed)",
+  "data-fetching": "TanStack Query 5.x"
+}
+```
+
+#### Backend
+```typescript
+{
+  "runtime": "Node.js 20.x",
+  "framework": "Next.js API Routes",
+  "auth": "NextAuth.js 5.x",
+  "database": "PostgreSQL 16.x",
+  "orm": "Prisma 5.x",
+  "api-type": "REST + tRPC (future)",
+  "file-storage": "AWS S3 / Cloudflare R2",
+  "email": "Resend",
+  "jobs": "Inngest / Bull Queue",
+  "ai": "OpenAI GPT-4 API"
+}
+```
+
+#### Infrastructure
+```yaml
+hosting:
+  frontend: Vercel
+  database: Supabase (or Railway)
+
+ci_cd:
+  platform: GitHub Actions
+  workflows:
+    - lint_test_build
+    - deploy_staging
+    - deploy_production
+
+monitoring:
+  errors: Sentry
+  analytics: Vercel Analytics
+  uptime: Better Uptime
+
+security:
+  secrets: Vercel Environment Variables
+  ssl: Vercel (automatic)
+  auth: NextAuth.js
+```
+
+## Database Schema
+
+### Core Models
+
+```prisma
+// prisma/schema.prisma
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// ============= Authentication =============
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+
+  // User preferences
+  timezone      String    @default("UTC")
+  workHoursStart Int      @default(9)  // 9 AM
+  workHoursEnd   Int      @default(17) // 5 PM
+  workDays      String[]  @default(["Mon", "Tue", "Wed", "Thu", "Fri"])
+  breakDuration Int       @default(15) // minutes
+
+  // Multi-tenancy
+  workspaceId   String
+
+  // Relations
+  workspace     Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  accounts      Account[]
+  sessions      Session[]
+  tasks         Task[]
+  calendars     Calendar[]
+  schedules     Schedule[]
+  notifications Notification[]
+  focusSessions FocusSession[]
+  auditLogs     AuditLog[]
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([email])
+  @@index([workspaceId])
+}
+
+model Workspace {
+  id            String   @id @default(cuid())
+  name          String
+  slug          String   @unique
+  type          WorkspaceType @default(PERSONAL) // PERSONAL | TEAM | ENTERPRISE
+
+  // Billing
+  plan          String   @default("free") // free | pro | enterprise
+  stripeCustomerId String?
+  stripeSubscriptionId String?
+
+  // Settings
+  settings      Json     @default("{}")
+
+  // Relations
+  users         User[]
+  tasks         Task[]
+  calendars     Calendar[]
+  schedules     Schedule[]
+  integrations  Integration[]
+  bookings      Booking[]
+  auditLogs     AuditLog[]
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([slug])
+}
+
+enum WorkspaceType {
+  PERSONAL
+  TEAM
+  ENTERPRISE
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ============= Calendars =============
+
+model Calendar {
+  id              String   @id @default(cuid())
+  workspaceId     String
+  userId          String
+  provider        String   // "google" | "microsoft"
+  externalId      String   // Calendar ID from provider
+  name            String
+  color           String?
+  isPrimary       Boolean  @default(false)
+  isActive        Boolean  @default(true)
+
+  // Sync metadata
+  lastSyncAt      DateTime?
+  syncToken       String?  @db.Text
+
+  workspace       Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  events          CalendarEvent[]
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([userId, provider, externalId])
+  @@index([workspaceId])
+  @@index([userId])
+}
+
+model CalendarEvent {
+  id              String   @id @default(cuid())
+  calendarId      String
+  externalId      String   // Event ID from provider
+
+  title           String
+  description     String?  @db.Text
+  location        String?
+
+  startTime       DateTime
+  endTime         DateTime
+  isAllDay        Boolean  @default(false)
+
+  recurrence      String?  // RRULE format
+  status          String   @default("confirmed") // confirmed | tentative | cancelled
+
+  calendar        Calendar @relation(fields: [calendarId], references: [id], onDelete: Cascade)
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([calendarId, externalId])
+  @@index([calendarId])
+  @@index([startTime, endTime])
+}
+
+// ============= Tasks =============
+
+model Task {
+  id              String   @id @default(cuid())
+  workspaceId     String
+  userId          String
+
+  title           String
+  description     String?  @db.Text
+
+  estimatedMinutes Int     // User's estimate
+  actualMinutes    Int?    // Tracked after completion
+
+  priority        Priority @default(MEDIUM)
+  status          TaskStatus @default(TODO)
+
+  deadline        DateTime?
+  tags            String[]
+
+  // AI scheduling metadata
+  flexibilityScore Float?  // 0-1, how flexible this task is
+  energyLevel     EnergyLevel? // LOW | MEDIUM | HIGH
+
+  workspace       Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  scheduleSlot    ScheduleSlot?
+
+  completedAt     DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([workspaceId])
+  @@index([userId, status])
+  @@index([userId, deadline])
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum EnergyLevel {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+// ============= AI Scheduling =============
+
+model Schedule {
+  id              String   @id @default(cuid())
+  workspaceId     String
+  userId          String
+
+  startDate       DateTime
+  endDate         DateTime
+
+  status          ScheduleStatus @default(ACTIVE)
+
+  // AI metadata
+  aiVersion       String   // Track which AI model/version created this
+  confidence      Float    // 0-1, AI confidence in this schedule
+
+  workspace       Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  slots           ScheduleSlot[]
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([workspaceId])
+  @@index([userId, status])
+}
+
+enum ScheduleStatus {
+  DRAFT
+  ACTIVE
+  ARCHIVED
+}
+
+model ScheduleSlot {
+  id              String   @id @default(cuid())
+  scheduleId      String
+  taskId          String   @unique
+
+  startTime       DateTime
+  endTime         DateTime
+
+  // AI reasoning (for transparency)
+  reasoning       String?  @db.Text
+
+  schedule        Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  task            Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([scheduleId])
+  @@index([startTime, endTime])
+}
+
+// ============= Integrations =============
+
+model Integration {
+  id              String   @id @default(cuid())
+  workspaceId     String
+  userId          String
+  type            IntegrationType
+  provider        String   // "todoist" | "asana" | "slack" | "notion" etc.
+
+  // OAuth tokens
+  accessToken     String?  @db.Text
+  refreshToken    String?  @db.Text
+  expiresAt       DateTime?
+
+  // Integration-specific config
+  config          Json     @default("{}")
+
+  isActive        Boolean  @default(true)
+  lastSyncAt      DateTime?
+  syncStatus      String?  // "syncing" | "success" | "error"
+  syncError       String?  @db.Text
+
+  workspace       Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([workspaceId, provider])
+  @@index([workspaceId])
+  @@index([userId])
+}
+
+enum IntegrationType {
+  TASK_MANAGEMENT
+  COMMUNICATION
+  NOTE_TAKING
+  TIME_TRACKING
+}
+
+// ============= Notifications =============
+
+model Notification {
+  id              String   @id @default(cuid())
+  userId          String
+  type            NotificationType
+  title           String
+  message         String   @db.Text
+  link            String?
+
+  isRead          Boolean  @default(false)
+  readAt          DateTime?
+
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt       DateTime @default(now())
+
+  @@index([userId, isRead])
+  @@index([createdAt])
+}
+
+enum NotificationType {
+  SYNC_COMPLETE
+  SYNC_ERROR
+  SCHEDULE_READY
+  TASK_DUE_SOON
+  MEETING_STARTING
+  SYSTEM
+}
+
+// ============= Focus & Productivity =============
+
+model FocusSession {
+  id              String   @id @default(cuid())
+  userId          String
+  taskId          String?
+
+  startTime       DateTime
+  endTime         DateTime?
+  targetDuration  Int      // minutes
+
+  status          FocusStatus @default(IN_PROGRESS)
+  completionRate  Float?   // 0-1, percentage of target completed
+
+  // Settings
+  blockDistractions Boolean @default(true)
+  soundscape      String?  // ambient sound type
+
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([userId])
+  @@index([startTime, endTime])
+}
+
+enum FocusStatus {
+  IN_PROGRESS
+  COMPLETED
+  ABANDONED
+}
+
+// ============= Team Coordination =============
+
+model Booking {
+  id              String   @id @default(cuid())
+  workspaceId     String
+  hostUserId      String
+
+  // Booking page config
+  slug            String   @unique
+  title           String
+  description     String?  @db.Text
+  duration        Int      // minutes
+
+  // Availability
+  availableDays   String[]
+  availableHours  Json     // { "Mon": ["09:00-17:00"], ... }
+
+  // Buffer times
+  bufferBefore    Int      @default(0)  // minutes
+  bufferAfter     Int      @default(0)
+
+  isActive        Boolean  @default(true)
+
+  workspace       Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  bookingSlots    BookingSlot[]
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([workspaceId])
+  @@index([slug])
+}
+
+model BookingSlot {
+  id              String   @id @default(cuid())
+  bookingId       String
+
+  guestName       String
+  guestEmail      String
+
+  startTime       DateTime
+  endTime         DateTime
+
+  status          BookingStatus @default(CONFIRMED)
+  cancelReason    String?  @db.Text
+
+  // Link to calendar event
+  calendarEventId String?
+
+  booking         Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([bookingId])
+  @@index([startTime, endTime])
+  @@index([guestEmail])
+}
+
+enum BookingStatus {
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+// ============= Admin & Audit =============
+
+model AuditLog {
+  id              String   @id @default(cuid())
+  workspaceId     String
+  userId          String
+
+  action          String   // "user.created" | "task.deleted" | "calendar.synced"
+  resource        String   // "User" | "Task" | "Calendar"
+  resourceId      String
+
+  changes         Json?    // Before/after values
+  ipAddress       String?
+  userAgent       String?  @db.Text
+
+  workspace       Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt       DateTime @default(now())
+
+  @@index([workspaceId])
+  @@index([userId])
+  @@index([resource, resourceId])
+  @@index([createdAt])
+}
+```
+
+## API Design
+
+### REST Endpoints
+
+```typescript
+// Authentication
+POST   /api/auth/signin
+POST   /api/auth/signout
+GET    /api/auth/session
+
+// User
+GET    /api/user/profile
+PATCH  /api/user/profile
+PATCH  /api/user/preferences
+
+// Calendars
+GET    /api/calendars                    // List user's calendars
+POST   /api/calendars/connect            // Connect new calendar
+DELETE /api/calendars/:id                // Disconnect calendar
+POST   /api/calendars/sync               // Trigger sync
+
+// Calendar Events
+GET    /api/calendars/:id/events         // Get events for calendar
+GET    /api/events?start=X&end=Y         // Get all events in range
+
+// Tasks
+GET    /api/tasks                        // List tasks (with filters)
+POST   /api/tasks                        // Create task
+GET    /api/tasks/:id                    // Get task details
+PATCH  /api/tasks/:id                    // Update task
+DELETE /api/tasks/:id                    // Delete task
+POST   /api/tasks/:id/complete           // Mark complete
+
+// AI Scheduling
+POST   /api/schedule/generate            // Generate new schedule
+GET    /api/schedule/current             // Get current schedule
+POST   /api/schedule/:id/accept          // Accept AI schedule
+POST   /api/schedule/:id/reject          // Reject and regenerate
+PATCH  /api/schedule/slots/:id           // Manual adjustment
+
+// Analytics
+GET    /api/analytics/time-breakdown     // Time spent by category
+GET    /api/analytics/productivity       // Productivity trends
+GET    /api/analytics/accuracy           // Estimation accuracy
+```
+
+### Request/Response Examples
+
+```typescript
+// POST /api/tasks
+Request:
+{
+  "title": "Write blog post",
+  "description": "Draft post about AI scheduling",
+  "estimatedMinutes": 120,
+  "priority": "HIGH",
+  "deadline": "2025-12-15T17:00:00Z",
+  "tags": ["writing", "blog"]
+}
+
+Response:
+{
+  "id": "task_abc123",
+  "userId": "user_xyz789",
+  "title": "Write blog post",
+  "estimatedMinutes": 120,
+  "priority": "HIGH",
+  "status": "TODO",
+  "createdAt": "2025-11-12T10:00:00Z"
+}
+
+// POST /api/schedule/generate
+Request:
+{
+  "startDate": "2025-11-12",
+  "endDate": "2025-11-18",
+  "taskIds": ["task_abc123", "task_def456"]
+}
+
+Response:
+{
+  "scheduleId": "schedule_xyz",
+  "confidence": 0.92,
+  "slots": [
+    {
+      "taskId": "task_abc123",
+      "startTime": "2025-11-12T14:00:00Z",
+      "endTime": "2025-11-12T16:00:00Z",
+      "reasoning": "Scheduled during afternoon when you typically have high energy for writing tasks"
+    }
+  ],
+  "warnings": [],
+  "suggestions": [
+    "Consider adding a 15-minute break after this task"
+  ]
+}
+```
+
+## AI Scheduling Algorithm
+
+### Phase 1: Rule-Based System
+
+```typescript
+// lib/ai/scheduler.ts
+
+interface SchedulingConstraints {
+  workHours: { start: number; end: number };
+  workDays: string[];
+  breakDuration: number;
+  existingEvents: CalendarEvent[];
+}
+
+interface SchedulingRequest {
+  tasks: Task[];
+  startDate: Date;
+  endDate: Date;
+  constraints: SchedulingConstraints;
+}
+
+/**
+ * Phase 1 Algorithm: Greedy Priority-First Scheduler
+ *
+ * 1. Sort tasks by priority (URGENT > HIGH > MEDIUM > LOW)
+ * 2. For each task, find earliest available slot
+ * 3. Check constraints (work hours, existing events)
+ * 4. Place task in slot
+ * 5. Insert break if needed
+ */
+export async function generateSchedule(
+  request: SchedulingRequest
+): Promise<Schedule> {
+  const { tasks, startDate, endDate, constraints } = request;
+
+  // 1. Sort by priority and deadline
+  const sortedTasks = tasks.sort((a, b) => {
+    if (a.priority !== b.priority) {
+      return priorityWeight(a.priority) - priorityWeight(b.priority);
+    }
+    if (a.deadline && b.deadline) {
+      return a.deadline.getTime() - b.deadline.getTime();
+    }
+    return 0;
+  });
+
+  // 2. Find available slots
+  const availableSlots = findAvailableTimeSlots(
+    startDate,
+    endDate,
+    constraints.existingEvents,
+    constraints.workHours
+  );
+
+  // 3. Place tasks
+  const schedule: ScheduleSlot[] = [];
+
+  for (const task of sortedTasks) {
+    const slot = findBestSlot(
+      task,
+      availableSlots,
+      schedule,
+      constraints
+    );
+
+    if (slot) {
+      schedule.push({
+        taskId: task.id,
+        startTime: slot.start,
+        endTime: slot.end,
+        reasoning: generateReasoning(task, slot, constraints)
+      });
+
+      // Mark slot as used
+      removeSlot(availableSlots, slot);
+
+      // Add break after if needed
+      if (shouldAddBreak(task, constraints)) {
+        const breakSlot = {
+          start: slot.end,
+          end: addMinutes(slot.end, constraints.breakDuration)
+        };
+        removeSlot(availableSlots, breakSlot);
+      }
+    }
+  }
+
+  return createSchedule(schedule);
+}
+
+function findBestSlot(
+  task: Task,
+  availableSlots: TimeSlot[],
+  existingSchedule: ScheduleSlot[],
+  constraints: SchedulingConstraints
+): TimeSlot | null {
+  const durationMs = task.estimatedMinutes * 60 * 1000;
+
+  for (const slot of availableSlots) {
+    const slotDuration = slot.end.getTime() - slot.start.getTime();
+
+    // Check if slot is large enough
+    if (slotDuration < durationMs) continue;
+
+    // Check if within work hours
+    if (!isWithinWorkHours(slot.start, constraints.workHours)) continue;
+
+    // Prefer morning for high-energy tasks
+    if (task.energyLevel === 'HIGH' && !isMorning(slot.start)) continue;
+
+    // Found a good slot
+    return {
+      start: slot.start,
+      end: new Date(slot.start.getTime() + durationMs)
+    };
+  }
+
+  return null;
+}
+```
+
+### Phase 2: ML-Enhanced System (Future)
+
+```typescript
+// lib/ai/ml-scheduler.ts
+
+/**
+ * Phase 2: Use GPT-4 for intelligent scheduling
+ *
+ * Benefits:
+ * - Learn from user feedback
+ * - Understand task context better
+ * - More nuanced reasoning
+ * - Natural language task parsing
+ */
+export async function generateScheduleWithAI(
+  request: SchedulingRequest,
+  userHistory: UserHistory
+): Promise<Schedule> {
+  const prompt = buildSchedulingPrompt(request, userHistory);
+
+  const response = await openai.chat.completions.create({
+    model: "gpt-4-turbo",
+    messages: [
+      {
+        role: "system",
+        content: SCHEDULING_SYSTEM_PROMPT
+      },
+      {
+        role: "user",
+        content: prompt
+      }
+    ],
+    response_format: { type: "json_object" }
+  });
+
+  const aiSchedule = JSON.parse(response.choices[0].message.content);
+
+  return validateAndCreateSchedule(aiSchedule);
+}
+
+const SCHEDULING_SYSTEM_PROMPT = `
+You are an AI scheduling assistant. Given a list of tasks and calendar events,
+create an optimal schedule that:
+
+1. Respects work hours and existing commitments
+2. Places high-priority tasks first
+3. Matches task energy requirements to time of day
+4. Includes appropriate breaks
+5. Leaves buffer time for overruns
+6. Provides reasoning for each placement
+
+Return a JSON object with scheduled slots.
+`;
+```
+
+## Calendar Integration
+
+### Google Calendar OAuth
+
+```typescript
+// lib/calendar/google.ts
+
+import { google } from 'googleapis';
+import { prisma } from '@/lib/db';
+
+export async function connectGoogleCalendar(userId: string) {
+  const oauth2Client = new google.auth.OAuth2(
+    process.env.GOOGLE_CLIENT_ID,
+    process.env.GOOGLE_CLIENT_SECRET,
+    process.env.GOOGLE_REDIRECT_URI
+  );
+
+  // Generate auth URL
+  const authUrl = oauth2Client.generateAuthUrl({
+    access_type: 'offline',
+    scope: [
+      'https://www.googleapis.com/auth/calendar.readonly',
+      'https://www.googleapis.com/auth/calendar.events'
+    ],
+    prompt: 'consent'
+  });
+
+  return authUrl;
+}
+
+export async function syncGoogleCalendar(calendarId: string) {
+  const calendar = await prisma.calendar.findUnique({
+    where: { id: calendarId },
+    include: { user: { include: { accounts: true } } }
+  });
+
+  const account = calendar.user.accounts.find(
+    a => a.provider === 'google'
+  );
+
+  const oauth2Client = new google.auth.OAuth2();
+  oauth2Client.setCredentials({
+    access_token: account.access_token,
+    refresh_token: account.refresh_token
+  });
+
+  const calendarAPI = google.calendar({ version: 'v3', auth: oauth2Client });
+
+  // Fetch events
+  const events = await calendarAPI.events.list({
+    calendarId: calendar.externalId,
+    timeMin: new Date().toISOString(),
+    maxResults: 2500,
+    singleEvents: true,
+    orderBy: 'startTime',
+    syncToken: calendar.syncToken
+  });
+
+  // Upsert events to database
+  for (const event of events.data.items || []) {
+    await prisma.calendarEvent.upsert({
+      where: {
+        calendarId_externalId: {
+          calendarId: calendar.id,
+          externalId: event.id
+        }
+      },
+      create: {
+        calendarId: calendar.id,
+        externalId: event.id,
+        title: event.summary || 'Untitled',
+        description: event.description,
+        location: event.location,
+        startTime: new Date(event.start.dateTime || event.start.date),
+        endTime: new Date(event.end.dateTime || event.end.date),
+        isAllDay: !!event.start.date,
+        status: event.status
+      },
+      update: {
+        title: event.summary || 'Untitled',
+        description: event.description,
+        location: event.location,
+        startTime: new Date(event.start.dateTime || event.start.date),
+        endTime: new Date(event.end.dateTime || event.end.date),
+        status: event.status
+      }
+    });
+  }
+
+  // Update sync token
+  await prisma.calendar.update({
+    where: { id: calendar.id },
+    data: {
+      lastSyncAt: new Date(),
+      syncToken: events.data.nextSyncToken
+    }
+  });
+}
+```
+
+## Frontend Architecture
+
+### Component Structure
+
+```typescript
+app/
+├── (auth)/
+│   ├── signin/
+│   │   └── page.tsx              // Sign in page
+│   └── layout.tsx                // Auth layout
+├── (dashboard)/
+│   ├── dashboard/
+│   │   └── page.tsx              // Main dashboard
+│   ├── tasks/
+│   │   ├── page.tsx              // Task list
+│   │   └── [id]/
+│   │       └── page.tsx          // Task detail
+│   ├── calendar/
+│   │   └── page.tsx              // Calendar view
+│   ├── settings/
+│   │   └── page.tsx              // Settings
+│   └── layout.tsx                // Dashboard layout with nav
+├── api/
+│   ├── auth/[...nextauth]/
+│   ├── tasks/
+│   ├── calendars/
+│   └── schedule/
+├── layout.tsx                    // Root layout
+└── page.tsx                      // Landing page
+
+components/
+├── ui/                           // Shadcn components
+├── features/
+│   ├── tasks/
+│   │   ├── TaskList.tsx
+│   │   ├── TaskCard.tsx
+│   │   ├── TaskForm.tsx
+│   │   └── TaskFilters.tsx
+│   ├── calendar/
+│   │   ├── CalendarView.tsx
+│   │   ├── EventCard.tsx
+│   │   └── SyncStatus.tsx
+│   ├── schedule/
+│   │   ├── ScheduleView.tsx
+│   │   ├── AIScheduleCard.tsx
+│   │   └── ScheduleControls.tsx
+│   └── auth/
+│       ├── SignInButton.tsx
+│       └── ProtectedRoute.tsx
+└── layouts/
+    ├── DashboardNav.tsx
+    └── DashboardSidebar.tsx
+```
+
+### State Management
+
+```typescript
+// lib/hooks/useTasks.ts
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+
+export function useTasks() {
+  const queryClient = useQueryClient();
+
+  const { data: tasks, isLoading } = useQuery({
+    queryKey: ['tasks'],
+    queryFn: async () => {
+      const res = await fetch('/api/tasks');
+      return res.json();
+    }
+  });
+
+  const createTask = useMutation({
+    mutationFn: async (task: CreateTaskInput) => {
+      const res = await fetch('/api/tasks', {
+        method: 'POST',
+        body: JSON.stringify(task)
+      });
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+    }
+  });
+
+  return { tasks, isLoading, createTask };
+}
+```
+
+## Deployment Strategy
+
+### Environments
+
+```yaml
+Development:
+  url: http://localhost:3000
+  database: Local PostgreSQL
+  env: .env.local
+
+Staging:
+  url: https://staging.aicalendaragent.com
+  database: Supabase (staging)
+  env: Vercel staging environment
+
+Production:
+  url: https://aicalendaragent.com
+  database: Supabase (production)
+  env: Vercel production environment
+```
+
+### CI/CD Pipeline
+
+```yaml
+# .github/workflows/ci.yml
+name: CI/CD
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run type-check
+      - run: npm run test
+      - run: npm run build
+
+  deploy-staging:
+    needs: lint-and-test
+    if: github.ref == 'refs/heads/develop'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.ORG_ID}}
+          vercel-project-id: ${{ secrets.PROJECT_ID}}
+          scope: ${{ secrets.TEAM_ID}}
+
+  deploy-production:
+    needs: lint-and-test
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-args: '--prod'
+          vercel-org-id: ${{ secrets.ORG_ID}}
+          vercel-project-id: ${{ secrets.PROJECT_ID}}
+```
+
+## Security
+
+### Authentication Flow
+
+1. User clicks "Sign in with Google"
+2. Redirect to Google OAuth consent
+3. User grants permissions
+4. Google redirects to /api/auth/callback/google
+5. NextAuth exchanges code for tokens
+6. Create/update user in database
+7. Create session
+8. Set secure httpOnly cookie
+9. Redirect to dashboard
+
+### Data Protection
+
+- **Encryption at rest**: Database encryption via Supabase
+- **Encryption in transit**: HTTPS only (enforced by Vercel)
+- **Session security**: httpOnly, secure, sameSite cookies
+- **Token storage**: Encrypted in database
+- **API keys**: Environment variables only
+- **Rate limiting**: 100 requests/minute per IP
+
+### Compliance
+
+- **GDPR**: User can export and delete all data
+- **Privacy**: Minimal data collection
+- **Terms**: Clear terms of service
+- **Data retention**: 30 days after account deletion
+
+## Performance Targets
+
+### Frontend
+- **Initial page load**: < 2 seconds
+- **Time to interactive**: < 3 seconds
+- **Lighthouse score**: > 90
+
+### Backend
+- **API response time**: < 200ms (p95)
+- **Database queries**: < 50ms (p95)
+- **Schedule generation**: < 3 seconds
+
+### Scalability
+- **Concurrent users**: 10,000
+- **Database connections**: 100
+- **API rate**: 1000 req/sec
+
+## Monitoring & Observability
+
+### Error Tracking
+```typescript
+// lib/sentry.ts
+import * as Sentry from '@sentry/nextjs';
+
+Sentry.init({
+  dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
+  tracesSampleRate: 1.0,
+  environment: process.env.NODE_ENV
+});
+```
+
+### Analytics
+- Page views (Vercel Analytics)
+- User actions (PostHog)
+- Business metrics (Custom dashboard)
+- Error rates (Sentry)
+- API performance (Vercel)
+
+## Testing Strategy
+
+### Unit Tests (Jest)
+```bash
+npm run test:unit
+```
+- Utilities and helpers
+- Business logic
+- API route handlers
+
+### Integration Tests
+```bash
+npm run test:integration
+```
+- API endpoints
+- Database operations
+- Calendar sync
+
+### E2E Tests (Playwright)
+```bash
+npm run test:e2e
+```
+- User flows
+- Critical paths
+- Cross-browser
+
+## Next Steps
+
+1. ✅ Review and approve this plan
+2. Create implementation tasks (.speckit/tasks)
+3. Set up development environment
+4. Begin Phase 1 implementation
